@@ -1,0 +1,40 @@
+NOVAVISION - WEB APP PRODUZIONE
+
+STACK
+- Frontend: Vite vanilla.
+- Backend dati/auth/storage: Supabase.
+- Pagamenti: Stripe Checkout + Stripe Customer Portal.
+- Deploy: Netlify + Netlify Functions.
+
+COMANDI
+1. npm install
+2. Copia .env.example in .env e compila le variabili.
+3. npm run dev
+4. npm run build
+
+SUPABASE
+- Esegui la migrazione in supabase/migrations/20260630120000_initial_schema.sql.
+- Abilita email/password e provider OAuth Google/Apple se desiderati.
+- Inserisci APP_URL e URL Netlify tra i redirect consentiti.
+- Rendi admin il primo account con:
+  update public.profiles set is_admin = true, publication_status = 'approved' where email = 'tua-email@example.com';
+
+STRIPE
+- Crea i Price ID ricorrenti per artista/cliente mensile/annuale.
+- Inserisci i Price ID nelle variabili Netlify.
+- Configura webhook:
+  /.netlify/functions/stripe-webhook
+- Eventi webhook:
+  checkout.session.completed
+  customer.subscription.updated
+  customer.subscription.deleted
+
+NETLIFY
+- Build command: npm run build
+- Publish directory: dist
+- Functions directory: netlify/functions
+
+NOTE PUBBLICAZIONE
+- L'app non usa piu dati demo come sorgente principale.
+- Profili e annunci pubblici richiedono approvazione admin.
+- I testi Termini, Privacy e Cookie sono bozze operative da revisionare legalmente prima del go-live aperto.

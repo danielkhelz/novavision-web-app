@@ -1,0 +1,59 @@
+NOVAVISION — FREE ACCOUNT + CONSULENTE
+
+FUNZIONI
+- Free account per artista o cliente.
+- Nessuna carta richiesta per Free.
+- Profilo artista: foto, dati, contatti, strumento, formazione e diploma.
+- Annunci protetti: apertura solo dopo registrazione/accesso.
+- Filtri: luogo, data, genere musicale, strumento e budget.
+- Candidatura diretta senza intermediazione sul compenso.
+- Consulente evento disponibile tramite pulsante flottante.
+- Consulenza demo su budget, artista, repertorio, audio e organizzazione.
+
+NETLIFY
+1. Crea cartella `novavision`.
+2. Inserisci questo `index.html`.
+3. Trascina la cartella su Deploy manually.
+
+LIMITI DEMO
+- Chat consulente automatica locale, non operatore umano reale.
+- Pagamenti Premium simulati.
+- Per produzione servono backend, database, autenticazione, Stripe e servizio live chat.
+
+
+CONTATTI INSERITI
+- info@novavisionmgmt.com
+- Eugenio Mangini — Artists & Performers Manager — 342 622 0391
+- Filippo Ravasio — Direzione e produzione artistica — 327 115 6830
+- Daniel Calzone — Responsabile Marketing & PR — 351 900 1260
+
+
+RESPONSIVE
+- Menu laterale da destra su tablet e smartphone.
+- Barra mobile inferiore rimossa.
+- Layout ottimizzato per desktop, tablet e telefono.
+- Griglie, modali, filtri, chat, dashboard e contatti adattivi.
+
+
+TORNA SU
+- Freccia disponibile su desktop, tablet e smartphone.
+- Compare dopo circa 420 px di scorrimento.
+- Ritorno fluido all'inizio della pagina.
+
+
+CORREZIONE PC
+- Pulsante Torna su visibile dopo 80 px di scorrimento.
+- Z-index aumentato per evitare sovrapposizioni.
+- Compatibilità migliorata con Chrome e Windows.
+
+LOGO
+- Inserito logo fornito dall'utente in header, menu mobile, footer e favicon.
+
+
+LINGUE
+- Selettore su desktop nell'header.
+- Selettore nel menu laterale su smartphone e tablet.
+- Automatico usa la lingua del browser/dispositivo.
+- Lingue incluse: Italiano e English.
+- Preferenza salvata nel dispositivo.
+- Date, valuta, pulsanti, modali e notifiche localizzati.

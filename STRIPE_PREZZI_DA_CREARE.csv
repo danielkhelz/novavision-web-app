@@ -1,0 +1,5 @@
+variabile_netlify,nome_prezzo_stripe,importo_eur,ricorrenza,price_id_da_incollare
+STRIPE_PRICE_ARTIST_MONTHLY,Premium artista mensile,2.00,month,
+STRIPE_PRICE_ARTIST_YEARLY,Premium artista annuale,19.00,year,
+STRIPE_PRICE_CLIENT_MONTHLY,Premium cliente mensile,3.00,month,
+STRIPE_PRICE_CLIENT_YEARLY,Premium cliente annuale,29.00,year,

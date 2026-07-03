@@ -1,0 +1,4572 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080808" />
+  <meta name="description" content="NovaVision connette direttamente artisti e clienti per eventi, locali, hotel e aziende." />
+  <meta name="application-version" content="artist-booking-management-1" />
+  <title>NovaVision — Artisti e clienti, senza intermediari</title>
+    <link rel="icon" type="image/png" href="novavision-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg: #f5f5f1;
+  --surface: #ffffff;
+  --surface-2: #efefea;
+  --surface-dark: #171914;
+  --surface-dark-2: #20231c;
+  --text: #171914;
+  --muted: #70736b;
+  --line: #dedfd8;
+  --line-dark: rgba(255,255,255,.11);
+  --primary: #171914;
+  --accent: #d8ff4f;
+  --accent-strong: #c7f229;
+  --accent-soft: #f0ffc1;
+  --success: #23855a;
+  --warning: #ba7413;
+  --danger: #bf4358;
+  --shadow: 0 22px 60px rgba(23,25,20,.10);
+  --shadow-sm: 0 10px 30px rgba(23,25,20,.07);
+  --radius-xl: 32px;
+  --radius-lg: 22px;
+  --radius-md: 14px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background: var(--bg);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; color: inherit; }
+a { color: inherit; }
+.hidden { display: none !important; }
+.svg-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icon {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
+
+.app-shell { min-height: 100vh; }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 42px;
+  padding: 0 clamp(22px, 4.5vw, 76px);
+  background: rgba(245,245,241,.91);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(222,223,216,.78);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 3px;
+  padding: 9px 8px;
+  border-radius: 12px;
+  background: var(--surface-dark);
+}
+.brand-mark i {
+  width: 4px;
+  border-radius: 4px;
+  background: var(--accent);
+}
+.brand-mark i:nth-child(1) { height: 9px; }
+.brand-mark i:nth-child(2) { height: 19px; }
+.brand-mark i:nth-child(3) { height: 13px; }
+.brand-word {
+  font-size: 21px;
+  font-weight: 850;
+  letter-spacing: -.045em;
+}
+.brand-word > span { color: #91b000; }
+.desktop-nav { display: flex; align-items: center; gap: 2px; }
+.nav-link {
+  position: relative;
+  border: 0;
+  background: transparent;
+  color: #5f625b;
+  padding: 11px 14px;
+  font-size: 14px;
+  font-weight: 650;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 4px;
+  height: 2px;
+  background: var(--text);
+  transform: scaleX(0);
+  transition: transform .2s ease;
+}
+.nav-link:hover, .nav-link.active { color: var(--text); }
+.nav-link.active::after { transform: scaleX(1); }
+.topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 9px; }
+
+.icon-btn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.7);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.icon-btn:hover { background: white; border-color: #c9cac2; }
+.badge {
+  position: absolute;
+  top: -3px;
+  right: -2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  border-radius: 99px;
+  background: var(--surface-dark);
+  color: white;
+  font-size: 9px;
+  font-weight: 800;
+  border: 2px solid var(--bg);
+}
+.btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-weight: 750;
+  font-size: 14px;
+  transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary {
+  color: white;
+  background: var(--surface-dark);
+  box-shadow: 0 8px 22px rgba(23,25,20,.16);
+}
+.btn-primary:hover { background: #292c24; }
+.btn-accent {
+  color: var(--surface-dark);
+  background: var(--accent);
+  box-shadow: 0 10px 30px rgba(160,198,25,.18);
+}
+.btn-accent:hover { background: var(--accent-strong); }
+.btn-secondary { background: white; border-color: var(--line); color: var(--text); }
+.btn-secondary:hover { border-color: #bfc1b8; }
+.btn-ghost { background: transparent; color: var(--text); }
+.btn-dark { background: var(--surface-dark); color: white; }
+.btn-light { background: white; color: var(--text); }
+.btn-small { min-height: 36px; padding: 0 14px; font-size: 12px; }
+.btn-block { width: 100%; }
+
+.logout-button {
+  min-height: 38px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+  transition: .2s ease;
+}
+.logout-button:hover {
+  border-color: #c8c9c1;
+  background: white;
+  color: var(--danger);
+}
+.logout-button .icon {
+  width: 16px;
+  height: 16px;
+}
+.profile-chip {
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  font-weight: 750;
+}
+
+.page { display: none; }
+.page.active { display: block; animation: pageIn .22s ease; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(5px); } }
+
+.hero {
+  position: relative;
+  min-height: 660px;
+  display: grid;
+  grid-template-columns: minmax(0,1.05fr) minmax(420px,.95fr);
+  gap: clamp(40px,6vw,90px);
+  align-items: center;
+  margin: 18px clamp(18px,3vw,46px) 0;
+  padding: clamp(54px,6vw,92px) clamp(30px,5.5vw,90px);
+  overflow: hidden;
+  border-radius: 36px;
+  color: white;
+  background:
+    linear-gradient(120deg, rgba(216,255,79,.045), transparent 34%),
+    var(--surface-dark);
+}
+.hero-orbit {
+  position: absolute;
+  border: 1px solid rgba(216,255,79,.13);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.orbit-a { width: 560px; height: 560px; right: -250px; top: -270px; }
+.orbit-b { width: 370px; height: 370px; left: -240px; bottom: -220px; }
+.hero-copy { position: relative; z-index: 2; }
+.eyebrow {
+  display: inline-block;
+  color: #5d6b20;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-weight: 850;
+}
+.eyebrow-light { color: #c8d58e; }
+.hero h1, .page-header h1, .dashboard-top h1 {
+  margin: 18px 0;
+  line-height: .98;
+  letter-spacing: -.064em;
+  font-weight: 820;
+}
+.hero h1 { max-width: 760px; font-size: clamp(52px,6vw,88px); }
+.hero h1 span { color: var(--accent); }
+.hero-copy > p {
+  max-width: 675px;
+  margin: 0;
+  color: rgba(255,255,255,.67);
+  font-size: 17px;
+  line-height: 1.65;
+}
+.hero-search {
+  position: relative;
+  z-index: 3;
+  margin-top: 34px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1.08fr .88fr auto;
+  gap: 6px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 28px 70px rgba(0,0,0,.24);
+}
+.hero-search label {
+  min-width: 0;
+  padding: 8px 12px;
+  border-right: 1px solid #e4e4de;
+}
+.hero-search label > span {
+  display: block;
+  margin: 0 0 5px 28px;
+  color: #7b7d75;
+  font-size: 9px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .11em;
+}
+.input-with-icon { display: flex; align-items: center; gap: 8px; color: #85877f; }
+.input-with-icon .icon { width: 17px; height: 17px; }
+.hero-search input, .hero-search select {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 2px 0;
+  font-size: 13px;
+  font-weight: 650;
+}
+.btn-search { min-width: 116px; border-radius: 13px; }
+.trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 23px;
+  color: rgba(255,255,255,.6);
+  font-size: 12px;
+  font-weight: 600;
+}
+.trust-row span { display: inline-flex; align-items: center; gap: 6px; }
+.trust-row .icon { width: 15px; height: 15px; color: var(--accent); }
+
+.hero-visual { position: relative; z-index: 2; min-height: 500px; }
+.stage-preview {
+  position: absolute;
+  inset: 20px 0 20px 45px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 28px;
+  background: #f8f8f4;
+  color: var(--text);
+  box-shadow: 0 35px 90px rgba(0,0,0,.32);
+  transform: rotate(1.4deg);
+}
+.preview-topbar {
+  min-height: 82px;
+  padding: 20px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #e2e3dc;
+}
+.preview-topbar span, .preview-topbar strong { display: block; }
+.preview-kicker {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .11em;
+  font-weight: 800;
+}
+.preview-topbar strong { font-size: 18px; letter-spacing: -.02em; }
+.live-pill {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #edf5d0;
+  color: #516313;
+  font-size: 10px;
+  font-weight: 800;
+}
+.live-pill i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #799714;
+}
+.preview-performance {
+  position: relative;
+  height: 205px;
+  margin: 16px;
+  overflow: hidden;
+  border-radius: 20px;
+  color: white;
+  background:
+    radial-gradient(circle at 76% 30%, rgba(216,255,79,.23), transparent 23%),
+    linear-gradient(135deg, #1e211b, #343a2b);
+}
+.preview-performance::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .5;
+  background-image: repeating-linear-gradient(116deg, transparent 0 18px, rgba(255,255,255,.035) 19px 20px);
+}
+.performance-copy { position: absolute; left: 20px; bottom: 20px; z-index: 2; }
+.performance-copy span, .performance-copy strong, .performance-copy small { display: block; }
+.performance-copy span { color: var(--accent); font-size: 10px; text-transform: uppercase; letter-spacing: .12em; font-weight: 850; }
+.performance-copy strong { margin: 7px 0 4px; font-size: 27px; letter-spacing: -.04em; }
+.performance-copy small { color: rgba(255,255,255,.62); }
+.performance-wave {
+  position: absolute;
+  right: 24px;
+  bottom: 25px;
+  height: 84px;
+  display: flex;
+  align-items: end;
+  gap: 5px;
+}
+.performance-wave i { width: 5px; border-radius: 5px; background: var(--accent); opacity: .85; }
+.performance-wave i:nth-child(1) { height: 24px; }
+.performance-wave i:nth-child(2) { height: 51px; }
+.performance-wave i:nth-child(3) { height: 32px; }
+.performance-wave i:nth-child(4) { height: 69px; }
+.performance-wave i:nth-child(5) { height: 45px; }
+.performance-wave i:nth-child(6) { height: 82px; }
+.performance-wave i:nth-child(7) { height: 55px; }
+.performance-wave i:nth-child(8) { height: 34px; }
+.performance-wave i:nth-child(9) { height: 64px; }
+.preview-list { padding: 2px 18px 18px; }
+.preview-list-head { display: flex; justify-content: space-between; align-items: center; margin: 0 2px 9px; }
+.preview-list-head strong { font-size: 12px; }
+.preview-list-head span { color: var(--muted); font-size: 9px; }
+.preview-artist {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  margin-top: 7px;
+  border: 1px solid #e1e2db;
+  border-radius: 13px;
+  background: white;
+}
+.preview-artist .avatar { width: 36px; height: 36px; border-radius: 11px; font-size: 10px; }
+.preview-artist strong, .preview-artist span { display: block; }
+.preview-artist strong { font-size: 11px; }
+.preview-artist span { color: var(--muted); font-size: 9px; margin-top: 3px; }
+.preview-artist b { font-size: 11px; }
+.floating-card {
+  position: absolute;
+  z-index: 4;
+  min-width: 175px;
+  padding: 14px 15px;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 16px;
+  background: rgba(255,255,255,.96);
+  color: var(--text);
+  box-shadow: 0 18px 50px rgba(0,0,0,.2);
+  backdrop-filter: blur(12px);
+}
+.floating-card strong, .floating-card span { display: block; }
+.floating-card strong { font-size: 12px; }
+.floating-card > span:not(.booking-icon) { margin-top: 4px; color: var(--muted); font-size: 9px; }
+.card-artist { left: 0; top: 5px; }
+.card-booking { right: -16px; bottom: 4px; display: flex; align-items: center; gap: 10px; min-width: 220px; }
+.mini-label { color: #6f8516 !important; text-transform: uppercase; letter-spacing: .1em; font-weight: 850; }
+.booking-icon {
+  width: 34px;
+  height: 34px;
+  display: grid !important;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--text);
+}
+.booking-icon .icon { width: 16px; height: 16px; }
+
+.stats {
+  max-width: 1180px;
+  margin: 28px auto 0;
+  padding: 0 clamp(18px,3vw,35px);
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+}
+.stats > div { padding: 24px 30px; border-right: 1px solid var(--line); }
+.stats > div:first-child { padding-left: 0; }
+.stats > div:last-child { border-right: 0; }
+.stats strong, .stats span { display: block; }
+.stats strong { font-size: 26px; letter-spacing: -.045em; }
+.stats span { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+.category-strip {
+  margin: 25px clamp(18px,4vw,76px) 0;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255,255,255,.65);
+}
+.category-strip button {
+  border: 0;
+  border-radius: 13px;
+  padding: 14px 12px;
+  background: transparent;
+  text-align: left;
+  font-weight: 750;
+  transition: .2s ease;
+}
+.category-strip button:hover { background: white; box-shadow: var(--shadow-sm); }
+.category-strip span {
+  display: inline-block;
+  margin-right: 8px;
+  color: #989b92;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.section-wrap { padding: 92px clamp(22px,5.5vw,94px); }
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 30px;
+  margin-bottom: 28px;
+}
+.section-heading h2 {
+  margin: 9px 0 0;
+  max-width: 800px;
+  font-size: clamp(32px,4vw,50px);
+  line-height: 1.04;
+  letter-spacing: -.055em;
+}
+.section-heading.centered { display: block; text-align: center; }
+.text-link {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #4f5e17;
+  font-weight: 800;
+  font-size: 13px;
+}
+.text-link:hover { color: var(--text); }
+
+.artist-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.artist-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 21px;
+  background: var(--surface);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.artist-card:hover {
+  transform: translateY(-5px);
+  border-color: #c6c8bd;
+  box-shadow: var(--shadow);
+}
+.artist-cover {
+  position: relative;
+  height: 195px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #22261e;
+}
+.artist-cover::before {
+  content: "";
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 50%;
+  right: -70px;
+  top: -90px;
+}
+.artist-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .46;
+  background-image: repeating-linear-gradient(120deg, transparent 0 17px, rgba(255,255,255,.045) 18px 19px);
+}
+.cover-1 { background: linear-gradient(140deg, #37243a, #8d6579); }
+.cover-2 { background: linear-gradient(140deg, #132f35, #4b8790); }
+.cover-3 { background: linear-gradient(140deg, #392619, #a16d43); }
+.cover-4 { background: linear-gradient(140deg, #2c2739, #695a91); }
+.cover-5 { background: linear-gradient(140deg, #17352c, #487c69); }
+.cover-6 { background: linear-gradient(140deg, #262a2b, #687175); }
+.cover-initials {
+  position: relative;
+  z-index: 1;
+  color: rgba(255,255,255,.92);
+  font-size: 56px;
+  font-weight: 780;
+  letter-spacing: -.08em;
+}
+.favorite-btn {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 50%;
+  background: rgba(22,24,20,.42);
+  color: white;
+  backdrop-filter: blur(10px);
+  font-size: 18px;
+}
+.favorite-btn.active { background: white; color: var(--danger); }
+.verified-badge {
+  position: absolute;
+  z-index: 3;
+  left: 12px;
+  bottom: 12px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: rgba(20,22,18,.74);
+  color: white;
+  font-size: 9px;
+  font-weight: 750;
+  backdrop-filter: blur(8px);
+}
+.artist-body { padding: 17px; }
+.artist-title-row { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.artist-title-row h3 { margin: 0; font-size: 17px; letter-spacing: -.025em; }
+.rating { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; font-size: 12px; font-weight: 800; }
+.rating .icon { width: 13px; height: 13px; fill: currentColor; }
+.artist-meta { margin: 6px 0 13px; color: var(--muted); font-size: 11px; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  padding: 6px 8px;
+  border-radius: 7px;
+  background: var(--surface-2);
+  color: #5c5f57;
+  font-size: 9px;
+  font-weight: 750;
+}
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  padding-top: 15px;
+  margin-top: 15px;
+  border-top: 1px solid #e5e6df;
+}
+.price strong { display: block; font-size: 17px; letter-spacing: -.03em; }
+.price span { color: var(--muted); font-size: 9px; }
+.availability { display: inline-flex; align-items: center; gap: 5px; color: var(--success); font-size: 10px; font-weight: 800; }
+.availability::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.artist-card .btn-block { margin-top: 13px !important; border-radius: 11px; min-height: 40px; }
+
+.how-it-works {
+  margin: 0 clamp(18px,3vw,46px);
+  padding: clamp(54px,6vw,86px) clamp(26px,5vw,76px);
+  border-radius: 32px;
+  background: var(--surface-dark);
+  color: white;
+}
+.process-heading { align-items: end; }
+.process-heading h2 { color: white; }
+.process-heading > p { max-width: 430px; color: rgba(255,255,255,.56); line-height: 1.65; font-size: 14px; }
+.steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 36px; }
+.steps-grid article {
+  position: relative;
+  min-height: 240px;
+  padding: 28px;
+  border: 1px solid var(--line-dark);
+  border-radius: 20px;
+  background: var(--surface-dark-2);
+}
+.step-number {
+  position: absolute;
+  right: 22px;
+  top: 18px;
+  color: rgba(255,255,255,.17);
+  font-size: 31px;
+  font-weight: 800;
+}
+.step-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--surface-dark);
+  background: var(--accent);
+}
+.steps-grid h3 { margin: 26px 0 8px; font-size: 18px; }
+.steps-grid p { margin: 0; color: rgba(255,255,255,.55); font-size: 13px; line-height: 1.6; }
+
+.cta-section {
+  min-height: 285px;
+  margin: 30px clamp(18px,3vw,46px) 90px;
+  padding: clamp(34px,5vw,66px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 35px;
+  overflow: hidden;
+  border: 1px solid #cdd3aa;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 86% 22%, rgba(216,255,79,.9), transparent 24%),
+    #e8efce;
+}
+.cta-section h2 {
+  max-width: 760px;
+  margin: 10px 0;
+  font-size: clamp(32px,4.5vw,55px);
+  line-height: 1.02;
+  letter-spacing: -.058em;
+}
+.cta-section p { margin: 0; color: #646957; }
+
+.page-header, .dashboard-top {
+  padding: 58px clamp(22px,5vw,78px) 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+}
+.page-header.compact { padding-bottom: 18px; }
+.page-header h1, .dashboard-top h1 { margin: 10px 0 6px; font-size: clamp(40px,5vw,62px); }
+.page-header p, .dashboard-top p { margin: 0; color: var(--muted); }
+
+.discover-layout {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 18px;
+  padding: 15px clamp(22px,5vw,78px) 80px;
+}
+.filter-panel, .panel {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+.filter-panel { align-self: start; position: sticky; top: 94px; padding: 20px; }
+.filter-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.filter-title h3 { margin: 0; font-size: 16px; }
+.field { display: block; margin-bottom: 15px; }
+.field > span { display: block; margin-bottom: 7px; color: #555950; font-size: 10px; font-weight: 820; text-transform: uppercase; letter-spacing: .07em; }
+.field input, .field select, .field textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: white;
+  padding: 11px 12px;
+  outline: 0;
+  font-size: 13px;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color: #879b38; box-shadow: 0 0 0 3px var(--accent-soft); }
+.field input[type="range"] { border: 0; padding: 0; box-shadow: none; accent-color: #6e8319; }
+.toggle-row { display: flex; gap: 9px; align-items: center; margin: 13px 0; color: #4d5049; font-size: 12px; }
+.toggle-row input { accent-color: #65791b; }
+.results-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
+.results-toolbar span { color: var(--muted); font-size: 12px; }
+.results-toolbar select { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; background: white; font-size: 12px; }
+.artist-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
+
+.map-panel {
+  position: relative;
+  height: 350px;
+  margin-bottom: 17px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #e4e7de;
+}
+.map-grid {
+  position: absolute; inset: 0; opacity: .55;
+  background-image:
+    linear-gradient(30deg, transparent 24%, rgba(255,255,255,.88) 25%, rgba(255,255,255,.88) 28%, transparent 29%),
+    linear-gradient(120deg, transparent 24%, rgba(255,255,255,.88) 25%, rgba(255,255,255,.88) 28%, transparent 29%);
+  background-size: 110px 110px;
+}
+.map-marker {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  transform: translate(-50%,-50%);
+  border: 4px solid white;
+  border-radius: 50% 50% 50% 8px;
+  background: var(--surface-dark);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: 850;
+  box-shadow: 0 7px 18px rgba(17,24,39,.2);
+  rotate: -45deg;
+}
+.map-marker span { rotate: 45deg; }
+.map-label { position: absolute; color: #555b50; font-weight: 800; font-size: 12px; }
+.label-milano { left: 45%; top: 47%; }
+.label-monza { right: 17%; top: 20%; }
+.label-rho { left: 15%; top: 35%; }
+
+.jobs-layout { padding: 15px clamp(22px,5vw,78px) 80px; }
+.job-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.chip { border: 1px solid var(--line); background: white; border-radius: 999px; padding: 9px 14px; font-size: 12px; font-weight: 750; color: var(--muted); }
+.chip.active { background: var(--surface-dark); color: white; border-color: var(--surface-dark); }
+.job-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; }
+.job-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 19px;
+  transition: .22s ease;
+}
+.job-card:hover { transform: translateY(-4px); border-color: #c6c8bd; box-shadow: var(--shadow-sm); }
+.job-card-top { display: flex; justify-content: space-between; align-items: start; gap: 15px; }
+.company-logo {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--surface-dark);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 850;
+}
+.job-card h3 { margin: 18px 0 7px; font-size: 19px; letter-spacing: -.03em; }
+.job-company { color: var(--muted); font-size: 11px; }
+.job-info { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 16px 0; }
+.job-info span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 8px;
+  border-radius: 9px;
+  background: var(--surface-2);
+  color: #555950;
+  font-size: 10px;
+}
+.job-info .icon { width: 14px; height: 14px; }
+.job-card p { color: var(--muted); font-size: 12px; line-height: 1.55; }
+.job-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 17px; padding-top: 15px; border-top: 1px solid var(--line); }
+.applicants { color: var(--muted); font-size: 10px; }
+
+.messages-shell {
+  margin: 0 clamp(22px,5vw,78px) 80px;
+  min-height: 650px;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.conversation-list { border-right: 1px solid var(--line); padding: 9px; }
+.conversation-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  display: flex;
+  gap: 11px;
+  text-align: left;
+  padding: 12px;
+  border-radius: 14px;
+}
+.conversation-item:hover, .conversation-item.active { background: var(--surface-2); }
+.conversation-copy { min-width: 0; flex: 1; }
+.conversation-copy strong, .conversation-copy span { display: block; }
+.conversation-copy strong { font-size: 12px; }
+.conversation-copy span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--muted); font-size: 10px; margin-top: 4px; }
+.conversation-time { color: var(--muted); font-size: 9px; }
+.chat-panel { min-width: 0; }
+.chat-empty { min-height: 650px; display: grid; place-content: center; text-align: center; color: var(--muted); }
+.chat-empty h3 { color: var(--text); margin: 15px 0 4px; }
+.empty-icon { width: 56px; height: 56px; margin: auto; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--text); }
+.chat-content { min-height: 650px; display: grid; grid-template-rows: auto 1fr auto; }
+.chat-header { padding: 14px 17px; border-bottom: 1px solid var(--line); display: flex; gap: 10px; align-items: center; }
+.chat-header div:nth-child(2) { flex: 1; }
+.chat-header strong, .chat-header span { display: block; }
+.chat-header strong { font-size: 13px; }
+.chat-header span { color: var(--success); font-size: 9px; margin-top: 3px; }
+.chat-messages { padding: 21px; overflow-y: auto; max-height: 530px; background: #fafaf7; }
+.message { display: flex; margin-bottom: 12px; }
+.message.mine { justify-content: flex-end; }
+.message-bubble { max-width: 70%; padding: 10px 12px; border-radius: 14px 14px 14px 4px; background: white; border: 1px solid var(--line); font-size: 12px; line-height: 1.45; }
+.message.mine .message-bubble { color: white; background: var(--surface-dark); border-color: var(--surface-dark); border-radius: 14px 14px 4px 14px; }
+.message-time { display: block; opacity: .62; font-size: 8px; margin-top: 5px; }
+.chat-compose { padding: 13px; border-top: 1px solid var(--line); display: flex; gap: 8px; }
+.chat-compose input { flex: 1; border: 1px solid var(--line); border-radius: 999px; padding: 0 14px; outline: 0; }
+
+.dashboard-top { align-items: center; }
+.role-switch { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #e7e8e1; }
+.role-switch button { border: 0; background: transparent; padding: 9px 14px; border-radius: 999px; font-size: 11px; font-weight: 800; color: var(--muted); }
+.role-switch button.active { background: white; color: var(--text); box-shadow: 0 3px 10px rgba(17,24,39,.07); }
+#artistDashboard, #clientDashboard { padding: 10px clamp(22px,5vw,78px) 80px; }
+.metric-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 13px; margin-bottom: 16px; }
+.metric-grid article { background: white; border: 1px solid var(--line); border-radius: 18px; padding: 19px; }
+.metric-grid span, .metric-grid strong, .metric-grid small { display: block; }
+.metric-grid span { color: var(--muted); font-size: 10px; font-weight: 750; text-transform: uppercase; letter-spacing: .06em; }
+.metric-grid strong { margin: 9px 0; font-size: 32px; letter-spacing: -.055em; }
+.metric-grid small { color: var(--success); font-size: 10px; }
+.dashboard-grid { display: grid; grid-template-columns: 1.55fr .85fr; gap: 16px; }
+.panel { padding: 19px; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.panel-header h3 { margin: 0; font-size: 16px; }
+.request-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 11px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.request-row:last-child { border-bottom: 0; }
+.request-row strong, .request-row span { display: block; }
+.request-row strong { font-size: 12px; }
+.request-row span { color: var(--muted); font-size: 10px; margin-top: 4px; }
+.request-price { text-align: right; }
+.request-actions { display: flex; gap: 5px; margin-top: 7px; justify-content: flex-end; }
+.action-mini { border: 1px solid var(--line); background: white; border-radius: 7px; padding: 5px 7px; font-size: 8px; font-weight: 800; }
+.action-mini.accept { color: var(--success); }
+.action-mini.reject { color: var(--danger); }
+.mini-calendar { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; }
+.calendar-day { aspect-ratio: 1; display: grid; place-items: center; border: 0; border-radius: 9px; background: var(--surface-2); font-size: 10px; color: var(--muted); }
+.calendar-day.head { aspect-ratio: auto; background: transparent; font-size: 8px; font-weight: 800; }
+.calendar-day.free { background: #e2f3e8; color: var(--success); font-weight: 800; }
+.calendar-day.busy { background: #f7e3e7; color: var(--danger); font-weight: 800; }
+.calendar-legend { display: flex; gap: 13px; color: var(--muted); font-size: 9px; margin-top: 14px; }
+.calendar-legend i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; }
+.legend-free { background: var(--success); }
+.legend-busy { background: var(--danger); }
+.empty-state { padding: 24px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 13px; font-size: 12px; }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(13,15,11,.68);
+  backdrop-filter: blur(8px);
+}
+.modal {
+  position: relative;
+  width: min(620px,100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 24px;
+  padding: 27px;
+  box-shadow: 0 36px 100px rgba(0,0,0,.3);
+}
+.modal-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 37px;
+  height: 37px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-size: 20px;
+}
+.modal-heading { padding-right: 35px; margin-bottom: 19px; }
+.modal-heading h2 { margin: 8px 0; font-size: 29px; letter-spacing: -.045em; }
+.modal-heading p { color: var(--muted); margin: 0; line-height: 1.45; font-size: 12px; }
+.auth-modal { width: min(660px,100%); }
+.auth-tabs { display: flex; gap: 4px; background: var(--surface-2); border-radius: 999px; padding: 4px; margin-bottom: 15px; }
+.auth-tabs button { flex: 1; border: 0; background: transparent; padding: 9px; border-radius: 999px; font-size: 11px; font-weight: 800; color: var(--muted); }
+.auth-tabs button.active { color: var(--text); background: white; box-shadow: 0 4px 12px rgba(17,24,39,.07); }
+.role-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 17px; }
+.role-cards button { border: 1px solid var(--line); background: white; text-align: left; padding: 14px; border-radius: 14px; }
+.role-cards button.active { border-color: #8b9e41; background: #f4f8e5; box-shadow: 0 0 0 2px rgba(121,145,32,.08); }
+.role-cards strong, .role-cards small { display: block; }
+.role-cards strong { font-size: 12px; }
+.role-cards small { color: var(--muted); margin-top: 4px; font-size: 10px; }
+.role-icon { float: right; color: #66771e; }
+.role-icon .icon { width: 23px; height: 23px; }
+.plan-tier-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.plan-tier-selector button { border: 1px solid var(--line); background: white; padding: 11px 13px; border-radius: 8px; text-align: left; }
+.plan-tier-selector button.active { border-color: #8b9e41; background: #f4f8e5; box-shadow: 0 0 0 2px rgba(121,145,32,.08); }
+.plan-tier-selector strong, .plan-tier-selector small { display: block; }
+.plan-tier-selector strong { font-size: 12px; }
+.plan-tier-selector small { color: var(--muted); margin-top: 3px; font-size: 9px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 11px; }
+.field.full { grid-column: 1 / -1; }
+.social-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 10px; margin: 14px 0; }
+.social-divider::before, .social-divider::after { content: ""; height: 1px; background: var(--line); flex: 1; }
+.social-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.social-letter { width: 20px; height: 20px; display: inline-grid; place-items: center; border-radius: 50%; background: var(--surface-2); font-size: 10px; font-weight: 900; }
+.btn-dark .social-letter { background: rgba(255,255,255,.14); }
+.legal-note { text-align: center; color: var(--muted); font-size: 9px; }
+.secure-note { padding: 11px; display: flex; align-items: center; gap: 7px; border-radius: 11px; background: #e8f5ec; color: #236845; font-size: 10px; margin-bottom: 14px; }
+
+.profile-modal { width: min(860px,100%); }
+.profile-hero { display: grid; grid-template-columns: 180px 1fr; gap: 21px; padding-bottom: 21px; border-bottom: 1px solid var(--line); }
+.profile-art { min-height: 180px; border-radius: 19px; display: grid; place-items: center; color: white; font-size: 55px; font-weight: 800; }
+.profile-title { display: flex; align-items: center; gap: 8px; }
+.profile-title h2 { margin: 0; font-size: 32px; letter-spacing: -.05em; }
+.check { color: #63781a; font-size: 10px; font-weight: 800; }
+.profile-sub { color: var(--muted); margin: 8px 0 14px; font-size: 11px; }
+.profile-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.profile-stats { display: flex; flex-wrap: wrap; gap: 16px; color: var(--muted); font-size: 10px; }
+.profile-stats strong { color: var(--text); }
+.profile-columns { display: grid; grid-template-columns: 1.35fr .65fr; gap: 21px; margin-top: 21px; }
+.profile-section { margin-bottom: 19px; }
+.profile-section h3 { margin: 0 0 8px; font-size: 15px; }
+.profile-section p { margin: 0; color: var(--muted); line-height: 1.65; font-size: 12px; }
+.video-placeholder { height: 180px; border-radius: 17px; background: linear-gradient(135deg,#20231c,#596545); color: var(--accent); display: grid; place-items: center; font-size: 35px; }
+.profile-booking-card { border: 1px solid var(--line); border-radius: 17px; padding: 17px; background: #fafaf7; }
+.profile-price { font-size: 25px; font-weight: 850; letter-spacing: -.04em; }
+.profile-price small { font-size: 10px; font-weight: 400; color: var(--muted); }
+.review { padding: 11px 0; border-bottom: 1px solid var(--line); }
+.review:last-child { border-bottom: 0; }
+.review strong, .review span { display: block; }
+.review strong { font-size: 10px; }
+.review span { color: var(--muted); font-size: 10px; margin-top: 5px; }
+
+.notification-panel {
+  position: fixed;
+  z-index: 90;
+  top: 69px;
+  right: 24px;
+  width: min(350px,calc(100vw - 30px));
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 11px;
+}
+.notification-head { display: flex; justify-content: space-between; padding: 8px; }
+.notification-item { display: flex; gap: 10px; padding: 11px 8px; border-radius: 11px; }
+.notification-item.unread { background: #f1f6df; }
+.notification-item > span { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 50%; background: white; color: #5e711a; }
+.notification-item > span .icon { width: 15px; height: 15px; }
+.notification-item strong { font-size: 11px; }
+.notification-item p { margin: 3px 0 0; color: var(--muted); font-size: 9px; }
+
+.toast {
+  position: fixed;
+  z-index: 150;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  border-radius: 999px;
+  color: var(--surface-dark);
+  background: var(--accent);
+  box-shadow: var(--shadow);
+  font-size: 11px;
+  font-weight: 800;
+}
+.mobile-nav { display: none; }
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-weight: 850;
+  letter-spacing: -.04em;
+}
+.avatar-small { width: 34px; height: 34px; border-radius: 50%; font-size: 10px; }
+.avatar-lg { width: 52px; height: 52px; }
+.gradient-1 { background: linear-gradient(135deg,#704f65,#332637); }
+.gradient-2 { background: linear-gradient(135deg,#477a82,#17343a); }
+.gradient-3 { background: linear-gradient(135deg,#a2734e,#432d1d); }
+.gradient-4 { background: linear-gradient(135deg,#557a69,#18372e); }
+.gradient-5 { background: linear-gradient(135deg,#6f628d,#2e293b); }
+.gradient-6 { background: linear-gradient(135deg,#70787b,#292e30); }
+
+@media (max-width: 1120px) {
+  .desktop-nav { display: none; }
+  .hero { grid-template-columns: 1fr; padding-bottom: 70px; }
+  .hero-visual { min-height: 470px; max-width: 620px; width: 100%; margin: 0 auto; }
+  .artist-grid { grid-template-columns: repeat(2,1fr); }
+  .artist-list { grid-template-columns: repeat(2,1fr); }
+  .job-grid { grid-template-columns: repeat(2,1fr); }
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 780px) {
+  body { padding-bottom: 72px; }
+  .topbar { height: 66px; padding: 0 15px; }
+  .topbar-actions .btn { display: none; }
+  .topbar-actions .icon-btn { width: 39px; height: 39px; }
+  .profile-chip span:last-child { display: none; }
+  .logout-button {
+    width: 39px;
+    height: 39px;
+    min-height: 39px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .logout-button span { display: none; }
+  .brand-word { font-size: 19px; }
+  .hero { margin: 10px 10px 0; padding: 43px 18px 34px; border-radius: 25px; min-height: auto; }
+  .hero h1 { font-size: 49px; }
+  .hero-copy > p { font-size: 15px; }
+  .hero-search { grid-template-columns: 1fr; padding: 9px; }
+  .hero-search label { border-right: 0; border-bottom: 1px solid #e4e4de; }
+  .btn-search { min-height: 48px; }
+  .hero-visual { min-height: 380px; margin-top: 10px; }
+  .stage-preview { inset: 20px 2px 20px 8px; }
+  .preview-topbar { padding: 16px; }
+  .preview-performance { height: 165px; }
+  .card-artist { left: -3px; }
+  .card-booking { right: -4px; }
+  .stats { grid-template-columns: 1fr 1fr; margin: 18px 18px 0; padding: 0; }
+  .stats > div { padding: 17px; }
+  .stats > div:first-child { padding-left: 17px; }
+  .stats > div:nth-child(2) { border-right: 0; }
+  .stats > div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .category-strip { grid-template-columns: 1fr 1fr; margin: 18px 10px 0; }
+  .category-strip button:last-child { grid-column: 1 / -1; }
+  .section-wrap { padding: 64px 18px; }
+  .section-heading { align-items: start; flex-direction: column; }
+  .artist-grid, .artist-list, .job-grid, .steps-grid, .metric-grid { grid-template-columns: 1fr; }
+  .how-it-works { margin: 0 10px; padding: 45px 18px; border-radius: 25px; }
+  .process-heading > p { max-width: none; }
+  .cta-section { margin: 18px 10px 60px; flex-direction: column; align-items: start; border-radius: 25px; }
+  .page-header, .dashboard-top { padding: 36px 18px 18px; align-items: start; flex-direction: column; }
+  .discover-layout { grid-template-columns: 1fr; padding: 10px 18px 70px; }
+  .filter-panel { position: static; }
+  .jobs-layout { padding: 10px 18px 70px; }
+  .messages-shell { margin: 0 12px 70px; min-height: 600px; grid-template-columns: 1fr; }
+  .conversation-list { border-right: 0; border-bottom: 1px solid var(--line); max-height: 235px; overflow-y: auto; }
+  .chat-empty { min-height: 350px; }
+  .chat-content { min-height: 500px; }
+  #artistDashboard, #clientDashboard { padding: 8px 18px 70px; }
+  .profile-hero, .profile-columns { grid-template-columns: 1fr; }
+  .profile-art { min-height: 130px; }
+  .form-grid, .social-buttons, .role-cards { grid-template-columns: 1fr; }
+  .mobile-nav {
+    position: fixed;
+    z-index: 80;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 68px;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    background: rgba(245,245,241,.96);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mobile-nav button {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 3px;
+    font-size: 9px;
+    font-weight: 750;
+  }
+  .mobile-nav .icon { width: 19px; height: 19px; }
+  .mobile-nav button.active { color: var(--text); }
+}
+
+  
+/* =========================================================
+   NOVAVISION DARK / ELECTRIC BLUE THEME
+   ========================================================= */
+:root {
+  --bg: #080808;
+  --surface: #0e0e0f;
+  --surface-2: #151516;
+  --surface-dark: #080808;
+  --surface-dark-2: #111112;
+  --text: #f4f4f4;
+  --muted: #92959b;
+  --line: #26272a;
+  --line-dark: #28292c;
+  --primary: #00a8f3;
+  --accent: #00a8f3;
+  --accent-strong: #008fd4;
+  --accent-soft: rgba(0,168,243,.12);
+  --success: #32c88a;
+  --warning: #e8a348;
+  --danger: #ff5b72;
+  --shadow: 0 24px 70px rgba(0,0,0,.38);
+  --shadow-sm: 0 12px 34px rgba(0,0,0,.26);
+}
+
+html { background: var(--bg); }
+
+body {
+  color: var(--text);
+  background:
+    radial-gradient(circle at 82% 7%, rgba(0,168,243,.07), transparent 25rem),
+    radial-gradient(circle at 5% 65%, rgba(0,168,243,.035), transparent 28rem),
+    var(--bg);
+  font-family: "Montserrat", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button, input, select, textarea { font-family: inherit; }
+
+.topbar {
+  background: rgba(8,8,8,.88);
+  border-bottom-color: rgba(255,255,255,.08);
+}
+
+.brand-mark {
+  background: transparent;
+  border: 1px solid var(--line);
+  box-shadow: inset 0 0 0 1px rgba(0,168,243,.04);
+}
+.brand-mark i { background: var(--accent); }
+.brand-word {
+  color: #f7f7f7;
+  font-weight: 900;
+  letter-spacing: -.055em;
+}
+.brand-word > span { color: var(--accent); }
+
+.nav-link { color: #909399; }
+.nav-link:hover, .nav-link.active { color: #fff; }
+.nav-link::after { background: var(--accent); }
+
+.icon-btn,
+.profile-chip,
+.logout-button {
+  color: #e7e7e7;
+  background: #101011;
+  border-color: var(--line);
+}
+.icon-btn:hover,
+.profile-chip:hover,
+.logout-button:hover {
+  color: var(--accent);
+  background: #171719;
+  border-color: #37383c;
+}
+.badge {
+  color: #04141d;
+  background: var(--accent);
+  border-color: var(--bg);
+}
+
+.btn-primary,
+.btn-accent {
+  color: #fff;
+  background: var(--accent);
+  box-shadow: 0 10px 32px rgba(0,168,243,.18);
+}
+.btn-primary:hover,
+.btn-accent:hover { background: var(--accent-strong); }
+.btn-secondary,
+.btn-light {
+  color: #f4f4f4;
+  background: #121213;
+  border-color: var(--line);
+}
+.btn-secondary:hover,
+.btn-light:hover {
+  color: var(--accent);
+  background: #181819;
+  border-color: #3b3c40;
+}
+.btn-ghost { color: #efefef; }
+.btn-dark { color: white; background: #020202; border-color: #27282b; }
+
+.hero {
+  border: 1px solid #1e1f22;
+  background:
+    linear-gradient(120deg, rgba(0,168,243,.055), transparent 31%),
+    linear-gradient(180deg, #0b0b0c, #080808);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+.hero-orbit { border-color: rgba(0,168,243,.12); }
+.eyebrow { color: var(--accent); }
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: 1px;
+}
+.eyebrow-light { color: #b4b6ba; }
+.hero h1,
+.page-header h1,
+.dashboard-top h1,
+.section-heading h2,
+.cta-section h2 {
+  color: #f7f7f7;
+  font-weight: 900;
+}
+.hero h1 span { color: var(--accent); }
+.hero-copy > p { color: #9b9da3; }
+
+.hero-search {
+  background: #101011;
+  border: 1px solid #292a2d;
+  box-shadow: 0 28px 80px rgba(0,0,0,.48);
+}
+.hero-search label { border-color: #2a2b2e; }
+.hero-search label > span { color: #74777e; }
+.input-with-icon { color: var(--accent); }
+.hero-search input,
+.hero-search select {
+  color: #f2f2f2;
+  background: transparent;
+}
+.hero-search select option {
+  color: white;
+  background: #111112;
+}
+.hero-search input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .7; }
+.trust-row { color: #898c92; }
+.trust-row .icon { color: var(--accent); }
+
+.stage-preview {
+  color: var(--text);
+  background: #0e0e0f;
+  border-color: #2a2b2e;
+  box-shadow: 0 36px 95px rgba(0,0,0,.6);
+}
+.preview-topbar { border-color: #27282b; }
+.preview-kicker,
+.preview-list-head span,
+.preview-artist span { color: #84878d; }
+.live-pill {
+  color: #aee5ff;
+  background: rgba(0,168,243,.12);
+  border: 1px solid rgba(0,168,243,.22);
+}
+.live-pill i { background: var(--accent); }
+.preview-performance {
+  background:
+    radial-gradient(circle at 75% 28%, rgba(0,168,243,.22), transparent 25%),
+    linear-gradient(135deg, #101114, #17232a);
+}
+.performance-copy span,
+.performance-wave i { color: var(--accent); background: var(--accent); }
+.performance-copy small { color: #979aa0; }
+.preview-artist {
+  background: #141415;
+  border-color: #292a2d;
+}
+.floating-card {
+  color: #f5f5f5;
+  background: rgba(15,15,16,.96);
+  border-color: #303136;
+}
+.floating-card > span:not(.booking-icon) { color: #898c92; }
+.mini-label { color: var(--accent) !important; }
+.booking-icon {
+  color: #021019;
+  background: var(--accent);
+}
+
+.stats { color: #f4f4f4; }
+.stats > div { border-color: #27282b; }
+.stats strong { color: var(--accent); font-weight: 900; }
+.stats span { color: #8e9197; text-transform: uppercase; letter-spacing: .06em; font-size: 10px; }
+
+.category-strip {
+  background: #0d0d0e;
+  border-color: #27282b;
+}
+.category-strip button { color: #f4f4f4; }
+.category-strip button:hover {
+  color: var(--accent);
+  background: #151516;
+}
+.category-strip span { color: var(--accent); }
+
+.section-wrap { color: var(--text); }
+.text-link { color: var(--accent); }
+.text-link:hover { color: #fff; }
+
+.artist-card,
+.job-card,
+.filter-panel,
+.panel,
+.messages-shell,
+.modal,
+.notification-panel {
+  color: var(--text);
+  background: #0f0f10;
+  border-color: #292a2d;
+}
+.artist-card:hover,
+.job-card:hover {
+  border-color: rgba(0,168,243,.5);
+  box-shadow: 0 18px 54px rgba(0,0,0,.38), 0 0 0 1px rgba(0,168,243,.08);
+}
+.artist-cover::before { border-color: rgba(0,168,243,.24); }
+.cover-1 { background: linear-gradient(145deg, #07151d, #0b79ad); }
+.cover-2 { background: linear-gradient(145deg, #10141a, #17577a); }
+.cover-3 { background: linear-gradient(145deg, #111114, #33596e); }
+.cover-4 { background: linear-gradient(145deg, #07151d, #006698); }
+.cover-5 { background: linear-gradient(145deg, #0d1115, #1a7da7); }
+.cover-6 { background: linear-gradient(145deg, #111214, #3a4046); }
+.favorite-btn {
+  color: white;
+  background: rgba(0,0,0,.5);
+  border-color: rgba(255,255,255,.18);
+}
+.favorite-btn.active { color: var(--accent); background: #101011; }
+.verified-badge {
+  color: #d9f4ff;
+  background: rgba(0,82,121,.72);
+  border: 1px solid rgba(0,168,243,.24);
+}
+.artist-title-row h3,
+.job-card h3,
+.panel-header h3,
+.chat-empty h3,
+.modal-heading h2,
+.profile-title h2,
+.profile-section h3 { color: #f7f7f7; }
+.rating { color: var(--accent); }
+.artist-meta,
+.job-company,
+.job-card p,
+.profile-sub,
+.profile-section p,
+.modal-heading p { color: #8f9298; }
+.tag {
+  color: #b9bcc2;
+  background: #19191b;
+  border: 1px solid #2b2c2f;
+}
+.card-footer,
+.job-footer,
+.request-row,
+.review,
+.chat-header,
+.chat-compose,
+.preview-topbar,
+.conversation-list { border-color: #292a2d; }
+.price strong,
+.profile-price { color: #fff; }
+.price span { color: #7e8187; }
+.availability { color: #34d18d; }
+
+.how-it-works {
+  background:
+    radial-gradient(circle at 82% 15%, rgba(0,168,243,.09), transparent 25rem),
+    #09090a;
+  border: 1px solid #252629;
+}
+.process-heading > p,
+.steps-grid p { color: #8f9298; }
+.steps-grid article {
+  background: #101011;
+  border-color: #292a2d;
+}
+.steps-grid article:hover { border-color: rgba(0,168,243,.45); }
+.step-number { color: rgba(0,168,243,.22); }
+.step-icon {
+  color: white;
+  background: var(--accent);
+}
+.steps-grid h3 { color: #f7f7f7; }
+
+.cta-section {
+  color: white;
+  background:
+    radial-gradient(circle at 86% 20%, rgba(0,168,243,.24), transparent 20rem),
+    linear-gradient(135deg, #0c0c0d, #111820);
+  border-color: #2b3338;
+}
+.cta-section p { color: #96999f; }
+
+.page-header p,
+.dashboard-top p { color: #8f9298; }
+
+.field > span { color: #989ba1; }
+.field input,
+.field select,
+.field textarea,
+.results-toolbar select,
+.chat-compose input {
+  color: #f3f3f3;
+  background: #09090a;
+  border-color: #2b2c30;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.chat-compose input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,168,243,.12);
+}
+.field select option,
+.results-toolbar select option {
+  color: white;
+  background: #101011;
+}
+.field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .65; }
+.field input[type="range"] { accent-color: var(--accent); }
+.toggle-row { color: #a7a9ae; }
+.toggle-row input { accent-color: var(--accent); }
+.results-toolbar span { color: #8d9096; }
+
+.map-panel { background: #111820; border-color: #292a2d; }
+.map-grid {
+  opacity: .24;
+  filter: invert(1);
+}
+.map-marker {
+  color: white;
+  background: var(--accent);
+  border-color: #0b0b0c;
+}
+.map-label { color: #bbc0c5; }
+
+.chip {
+  color: #9da0a6;
+  background: #101011;
+  border-color: #292a2d;
+}
+.chip.active {
+  color: white;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.company-logo {
+  color: white;
+  background: var(--accent);
+}
+.job-info span {
+  color: #b5b8bd;
+  background: #171719;
+}
+.applicants { color: #85888e; }
+
+.conversation-item { color: white; }
+.conversation-item:hover,
+.conversation-item.active { background: #19191b; }
+.conversation-copy span,
+.conversation-time { color: #80838a; }
+.chat-empty { color: #898c92; }
+.empty-icon {
+  color: white;
+  background: var(--accent);
+}
+.chat-header span { color: var(--accent); }
+.chat-messages { background: #0a0a0b; }
+.message-bubble {
+  color: #e7e7e7;
+  background: #151516;
+  border-color: #292a2d;
+}
+.message.mine .message-bubble {
+  color: white;
+  background: #007fba;
+  border-color: #007fba;
+}
+
+.role-switch,
+.auth-tabs { background: #18181a; }
+.role-switch button,
+.auth-tabs button { color: #8f9298; }
+.role-switch button.active,
+.auth-tabs button.active {
+  color: white;
+  background: #27282b;
+}
+.metric-grid article {
+  color: white;
+  background: #101011;
+  border-color: #292a2d;
+}
+.metric-grid span { color: #898c92; }
+.metric-grid strong { color: var(--accent); }
+.metric-grid small { color: #64dca8; }
+.action-mini {
+  color: #d9dadd;
+  background: #151516;
+  border-color: #303136;
+}
+.calendar-day {
+  color: #92959b;
+  background: #171719;
+}
+.calendar-day.head { background: transparent; }
+.calendar-day.free { color: #5fe0a8; background: rgba(50,200,138,.12); }
+.calendar-day.busy { color: #ff7b8e; background: rgba(255,91,114,.12); }
+.empty-state {
+  color: #8c8f95;
+  border-color: #343539;
+}
+
+.modal-backdrop { background: rgba(0,0,0,.78); }
+.modal-close {
+  color: #d8d8da;
+  background: #1a1a1c;
+}
+.auth-tabs button.active { box-shadow: none; }
+.role-cards button {
+  color: white;
+  background: #111112;
+  border-color: #2b2c30;
+}
+.role-cards button.active {
+  background: rgba(0,168,243,.10);
+  border-color: rgba(0,168,243,.62);
+  box-shadow: 0 0 0 2px rgba(0,168,243,.07);
+}
+.plan-tier-selector button {
+  color: white;
+  background: #111112;
+  border-color: #2b2c30;
+}
+.plan-tier-selector button.active {
+  background: rgba(0,168,243,.10);
+  border-color: rgba(0,168,243,.62);
+  box-shadow: 0 0 0 2px rgba(0,168,243,.07);
+}
+.role-cards small,
+.plan-tier-selector small,
+.legal-note,
+.social-divider { color: #898c92; }
+.role-icon { color: var(--accent); }
+.social-divider::before,
+.social-divider::after { background: #292a2d; }
+.social-letter { color: white; background: #202023; }
+.secure-note {
+  color: #9be9c9;
+  background: rgba(50,200,138,.10);
+  border: 1px solid rgba(50,200,138,.17);
+}
+
+.profile-art { color: white; }
+.check { color: var(--accent); }
+.profile-stats { color: #8e9197; }
+.profile-stats strong { color: white; }
+.video-placeholder {
+  color: white;
+  background:
+    radial-gradient(circle at 70% 25%, rgba(0,168,243,.32), transparent 25%),
+    linear-gradient(135deg, #0c0d0f, #132631);
+}
+.profile-booking-card {
+  color: white;
+  background: #121213;
+  border-color: #2b2c30;
+}
+
+.notification-item.unread { background: rgba(0,168,243,.09); }
+.notification-item > span {
+  color: white;
+  background: var(--accent);
+}
+.notification-item p { color: #898c92; }
+
+.toast {
+  color: white;
+  background: var(--accent);
+  box-shadow: 0 18px 50px rgba(0,168,243,.28);
+}
+
+.gradient-1 { background: linear-gradient(135deg,#005d89,#00a8f3); }
+.gradient-2 { background: linear-gradient(135deg,#16384a,#008bca); }
+.gradient-3 { background: linear-gradient(135deg,#26333a,#00a8f3); }
+.gradient-4 { background: linear-gradient(135deg,#0a4e70,#009add); }
+.gradient-5 { background: linear-gradient(135deg,#242a31,#0e81b4); }
+.gradient-6 { background: linear-gradient(135deg,#292b2f,#656a70); }
+
+.mobile-nav {
+  background: rgba(8,8,8,.96);
+  border-top-color: #28292c;
+}
+.mobile-nav button { color: #7f8288; }
+.mobile-nav button.active { color: var(--accent); }
+
+@media (max-width: 780px) {
+  .hero { background: linear-gradient(180deg,#0b0b0c,#080808); }
+  .topbar { background: rgba(8,8,8,.95); }
+  .category-strip { background: #0c0c0d; }
+}
+
+
+/* =========================================================
+   ABBONAMENTI + GEOLOCALIZZAZIONE
+   ========================================================= */
+.pricing-section {
+  margin: 86px clamp(18px,4vw,76px);
+  padding: clamp(34px,5vw,70px);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 87% 5%, rgba(0,168,243,.12), transparent 25rem),
+    #0b0b0c;
+}
+.pricing-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 30px;
+  margin-bottom: 34px;
+}
+.pricing-heading h2 {
+  margin: 11px 0 8px;
+  color: #f7f7f7;
+  font-size: clamp(32px,4vw,52px);
+  line-height: 1.04;
+  letter-spacing: -.055em;
+  font-weight: 900;
+}
+.pricing-heading h2 span { color: var(--accent); }
+.pricing-heading p {
+  max-width: 650px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 13px;
+}
+.billing-toggle {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #121213;
+}
+.billing-toggle button {
+  min-height: 38px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 999px;
+  color: #8f9298;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 800;
+}
+.billing-toggle button.active {
+  color: white;
+  background: var(--accent);
+}
+.billing-toggle small {
+  margin-left: 4px;
+  font-size: 8px;
+  opacity: .85;
+}
+.billing-toggle.compact button {
+  min-height: 31px;
+  padding: 0 10px;
+  font-size: 9px;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 15px;
+}
+.pricing-card {
+  position: relative;
+  padding: clamp(24px,3.5vw,38px);
+  overflow: hidden;
+  border: 1px solid #292a2d;
+  border-radius: 23px;
+  background: #101011;
+}
+.pricing-card.featured {
+  border-color: rgba(0,168,243,.55);
+  box-shadow: inset 0 0 0 1px rgba(0,168,243,.08);
+}
+.pricing-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.plan-icon,
+.subscription-symbol,
+.checkout-plan-icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 13px;
+  color: white;
+  background: var(--accent);
+}
+.plan-label {
+  color: var(--accent);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-weight: 850;
+}
+.pricing-card h3 {
+  margin: 26px 0 8px;
+  color: white;
+  font-size: 25px;
+  letter-spacing: -.04em;
+}
+.pricing-card > p {
+  min-height: 44px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.plan-price-row {
+  display: flex;
+  align-items: end;
+  gap: 7px;
+  margin: 25px 0 6px;
+}
+.plan-price-row strong {
+  color: white;
+  font-size: clamp(44px,5vw,62px);
+  line-height: .9;
+  letter-spacing: -.07em;
+}
+.plan-price-row span {
+  padding-bottom: 5px;
+  color: #8e9197;
+  font-size: 11px;
+}
+.annual-saving {
+  color: #83d8ff;
+  font-size: 10px;
+  font-weight: 750;
+}
+.pricing-card ul {
+  display: grid;
+  gap: 11px;
+  margin: 25px 0;
+  padding: 0;
+  list-style: none;
+}
+.pricing-card li {
+  position: relative;
+  padding-left: 21px;
+  color: #c4c6ca;
+  font-size: 11px;
+}
+.pricing-card li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 900;
+}
+.recommended-plan {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: white;
+  background: rgba(0,168,243,.15);
+  border: 1px solid rgba(0,168,243,.28);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 850;
+}
+
+.subscription-chooser {
+  margin-bottom: 17px;
+  padding: 14px;
+  border: 1px solid #2b2c30;
+  border-radius: 15px;
+  background: #111112;
+}
+.subscription-chooser-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 13px;
+}
+.subscription-chooser-top span,
+.subscription-chooser-top strong {
+  display: block;
+}
+.subscription-chooser-top span {
+  color: #85888e;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 800;
+}
+.subscription-chooser-top strong {
+  margin-top: 4px;
+  color: white;
+  font-size: 12px;
+}
+.auth-plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid #292a2d;
+}
+.auth-plan-price strong {
+  color: var(--accent);
+  font-size: 24px;
+  letter-spacing: -.045em;
+}
+.auth-plan-price span {
+  color: #9a9da3;
+  font-size: 10px;
+}
+.auth-plan-price small {
+  margin-left: auto;
+  color: #7bd2fa;
+  font-size: 9px;
+}
+
+.location-request-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 13px;
+  padding: 12px;
+  border: 1px solid #2b2c30;
+  border-radius: 12px;
+  background: #0b0b0c;
+}
+.location-request-box strong,
+.location-request-box small {
+  display: block;
+}
+.location-request-box strong {
+  color: #e8e8e8;
+  font-size: 10px;
+}
+.location-request-box small {
+  margin-top: 4px;
+  color: #85888e;
+  font-size: 9px;
+  line-height: 1.4;
+}
+.location-request-box.success {
+  border-color: rgba(50,200,138,.4);
+  background: rgba(50,200,138,.06);
+}
+.location-request-box.error {
+  border-color: rgba(255,91,114,.35);
+  background: rgba(255,91,114,.05);
+}
+
+.location-match-banner {
+  margin: 5px clamp(22px,5vw,78px) 8px;
+  padding: 13px 15px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(0,168,243,.28);
+  border-radius: 15px;
+  background: rgba(0,168,243,.07);
+}
+.location-match-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: white;
+  background: var(--accent);
+}
+.location-match-banner strong,
+.location-match-banner span {
+  display: block;
+}
+.location-match-banner strong {
+  color: white;
+  font-size: 11px;
+}
+.location-match-banner span {
+  margin-top: 3px;
+  color: #92959b;
+  font-size: 9px;
+}
+
+.subscription-summary {
+  margin: 0 clamp(22px,5vw,78px) 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background:
+    radial-gradient(circle at 90% 20%, rgba(0,168,243,.13), transparent 16rem),
+    #0f0f10;
+}
+.subscription-summary-main {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.subscription-summary-main span,
+.subscription-summary-main strong,
+.subscription-summary-main small {
+  display: block;
+}
+.subscription-kicker {
+  color: #83868c;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: .11em;
+  font-weight: 850;
+}
+.subscription-summary-main strong {
+  margin: 4px 0;
+  color: white;
+  font-size: 14px;
+}
+.subscription-summary-main small {
+  color: #92959b;
+  font-size: 9px;
+}
+.subscription-summary-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.subscription-status {
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: #78e2b4;
+  background: rgba(50,200,138,.10);
+  border: 1px solid rgba(50,200,138,.17);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 850;
+}
+
+.payment-modal { width: min(560px,100%); }
+.checkout-summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 19px;
+  padding: 14px;
+  border: 1px solid rgba(0,168,243,.25);
+  border-radius: 15px;
+  background: rgba(0,168,243,.07);
+}
+.checkout-summary span,
+.checkout-summary strong {
+  display: block;
+}
+.checkout-summary span {
+  color: #92959b;
+  font-size: 9px;
+}
+.checkout-summary strong {
+  margin-top: 3px;
+  color: white;
+  font-size: 18px;
+}
+.checkout-summary > small {
+  color: #a4a7ac;
+  font-size: 8px;
+}
+.payment-input {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 0 12px;
+  border: 1px solid #2b2c30;
+  border-radius: 11px;
+  background: #09090a;
+}
+.payment-input .icon {
+  color: var(--accent);
+}
+.payment-input input {
+  border: 0 !important;
+  padding-left: 0 !important;
+  box-shadow: none !important;
+}
+
+.distance-label {
+  color: #7bd2fa;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+@media (max-width: 780px) {
+  .pricing-section {
+    margin: 62px 10px;
+    padding: 38px 18px;
+    border-radius: 25px;
+  }
+  .pricing-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .pricing-card > p { min-height: auto; }
+  .location-request-box {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .location-match-banner {
+    margin: 4px 18px 8px;
+    grid-template-columns: auto 1fr;
+  }
+  .location-match-banner .btn {
+    grid-column: 1 / -1;
+  }
+  .subscription-summary {
+    margin: 0 18px 15px;
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .subscription-summary-actions {
+    justify-content: space-between;
+  }
+  .subscription-chooser-top {
+    align-items: start;
+    flex-direction: column;
+  }
+  .checkout-summary {
+    grid-template-columns: auto 1fr;
+  }
+  .checkout-summary > small {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* =========================================================
+   FREE ACCOUNT, FILTRI ANNUNCI, CONSULENTE
+   ========================================================= */
+.pricing-grid-three {
+  grid-template-columns: repeat(3,minmax(0,1fr));
+}
+.free-card {
+  border-color: rgba(255,255,255,.18);
+  background:
+    radial-gradient(circle at 88% 10%, rgba(0,168,243,.08), transparent 16rem),
+    #101011;
+}
+.free-card .plan-icon {
+  color: var(--accent);
+  background: rgba(0,168,243,.12);
+  border: 1px solid rgba(0,168,243,.25);
+}
+.free-card .plan-price-row strong { color: var(--accent); }
+
+.advisor-promo {
+  margin: 20px clamp(18px,3vw,46px) 85px;
+  padding: clamp(28px,4vw,48px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 23px;
+  border: 1px solid #29343b;
+  border-radius: 27px;
+  background:
+    radial-gradient(circle at 90% 20%, rgba(0,168,243,.18), transparent 20rem),
+    #0e1012;
+}
+.advisor-promo-icon {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  color: white;
+  background: var(--accent);
+}
+.advisor-promo-icon .icon { width: 31px; height: 31px; }
+.advisor-promo h2 {
+  margin: 8px 0;
+  color: white;
+  font-size: clamp(25px,3vw,40px);
+  letter-spacing: -.045em;
+}
+.advisor-promo p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.job-filter-panel {
+  margin-bottom: 17px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #0f0f10;
+}
+.job-filter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.job-filter-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.job-filter-heading .icon { color: var(--accent); }
+.job-filter-heading strong { font-size: 13px; }
+.job-filter-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr 1fr .85fr;
+  gap: 10px;
+}
+.job-filter-grid .field { margin: 0; }
+
+.profile-photo-upload {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px;
+  border: 1px solid #2b2c30;
+  border-radius: 12px;
+  background: #0b0b0c;
+}
+.profile-photo-preview {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: 50%;
+  color: var(--accent);
+  background: #171719;
+  border: 1px solid #303136;
+}
+.profile-photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.profile-photo-upload input {
+  max-width: 100%;
+  color: #a7a9ae;
+  font-size: 10px;
+}
+.profile-photo-upload small {
+  display: block;
+  margin-top: 5px;
+  color: #74777e;
+  font-size: 8px;
+}
+
+.gate-modal {
+  width: min(470px,100%);
+  text-align: center;
+}
+.gate-icon {
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 15px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  background: var(--accent);
+}
+.gate-icon .icon { width: 26px; height: 26px; }
+.gate-modal .modal-heading { padding-right: 0; }
+.gate-actions { display: grid; gap: 9px; }
+
+.advisor-fab {
+  position: fixed;
+  z-index: 88;
+  right: 22px;
+  bottom: 22px;
+  min-height: 52px;
+  padding: 0 17px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 999px;
+  color: white;
+  background: var(--accent);
+  box-shadow: 0 18px 48px rgba(0,168,243,.28);
+  font-size: 11px;
+  font-weight: 850;
+}
+.advisor-fab .icon { width: 20px; height: 20px; }
+.advisor-fab i {
+  width: 7px;
+  height: 7px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #39d58f;
+}
+
+.advisor-chat {
+  position: fixed;
+  z-index: 120;
+  right: 22px;
+  bottom: 86px;
+  width: min(390px,calc(100vw - 28px));
+  overflow: hidden;
+  border: 1px solid #303136;
+  border-radius: 21px;
+  background: #0d0d0e;
+  box-shadow: 0 30px 90px rgba(0,0,0,.58);
+}
+.advisor-chat-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-bottom: 1px solid #292a2d;
+}
+.advisor-avatar {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: white;
+  background: var(--accent);
+}
+.advisor-chat-header strong,
+.advisor-chat-header span { display: block; }
+.advisor-chat-header strong { color: white; font-size: 12px; }
+.advisor-chat-header span { margin-top: 3px; color: #85888e; font-size: 8px; }
+.advisor-chat-header span i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: #39d58f;
+}
+.advisor-close {
+  width: 33px;
+  height: 33px;
+  border: 0;
+  border-radius: 50%;
+  color: #d5d6d8;
+  background: #19191b;
+  font-size: 18px;
+}
+.advisor-intro {
+  padding: 10px 14px;
+  color: #92959b;
+  background: rgba(0,168,243,.06);
+  border-bottom: 1px solid #292a2d;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.advisor-messages {
+  height: 275px;
+  padding: 14px;
+  overflow-y: auto;
+  background: #09090a;
+}
+.advisor-message {
+  display: flex;
+  margin-bottom: 10px;
+}
+.advisor-message.mine { justify-content: flex-end; }
+.advisor-bubble {
+  max-width: 82%;
+  padding: 10px 11px;
+  border: 1px solid #292a2d;
+  border-radius: 13px 13px 13px 4px;
+  color: #dedfe1;
+  background: #151516;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.advisor-message.mine .advisor-bubble {
+  color: white;
+  background: #007fb8;
+  border-color: #007fb8;
+  border-radius: 13px 13px 4px 13px;
+}
+.advisor-message small {
+  display: block;
+  margin-top: 5px;
+  opacity: .58;
+  font-size: 7px;
+}
+.advisor-quick-actions {
+  display: flex;
+  gap: 6px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  border-top: 1px solid #292a2d;
+}
+.advisor-quick-actions button {
+  white-space: nowrap;
+  padding: 7px 9px;
+  border: 1px solid #303136;
+  border-radius: 999px;
+  color: #b7b9bd;
+  background: #151516;
+  font-size: 8px;
+}
+.advisor-quick-actions button:hover {
+  color: var(--accent);
+  border-color: rgba(0,168,243,.4);
+}
+.advisor-compose {
+  display: flex;
+  gap: 7px;
+  padding: 11px;
+  border-top: 1px solid #292a2d;
+}
+.advisor-compose input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid #2b2c30;
+  border-radius: 999px;
+  color: white;
+  background: #111112;
+  padding: 0 12px;
+  outline: 0;
+  font-size: 10px;
+}
+.advisor-compose input:focus { border-color: var(--accent); }
+
+@media (max-width: 1120px) {
+  .pricing-grid-three { grid-template-columns: 1fr 1fr; }
+  .free-card { grid-column: 1 / -1; }
+  .job-filter-grid { grid-template-columns: repeat(3,1fr); }
+}
+@media (max-width: 780px) {
+  .pricing-grid-three { grid-template-columns: 1fr; }
+  .free-card { grid-column: auto; }
+  .advisor-promo {
+    margin: 18px 10px 60px;
+    grid-template-columns: 1fr;
+  }
+  .job-filter-grid { grid-template-columns: 1fr; }
+  .advisor-fab {
+    right: 12px;
+    bottom: 78px;
+    width: 48px;
+    height: 48px;
+    min-height: 48px;
+    padding: 0;
+    justify-content: center;
+  }
+  .advisor-fab span,
+  .advisor-fab i { display: none; }
+  .advisor-chat {
+    right: 10px;
+    bottom: 134px;
+    width: calc(100vw - 20px);
+  }
+}
+
+
+.public-user-profile {
+  margin: 0 clamp(22px,5vw,78px) 16px;
+  display: grid;
+  grid-template-columns: auto 1fr minmax(230px,.75fr);
+  align-items: center;
+  gap: 18px;
+}
+.public-profile-avatar {
+  width: 82px;
+  height: 82px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 22px;
+  color: white;
+  background: linear-gradient(135deg,#005d89,#00a8f3);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -.05em;
+}
+.public-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.public-profile-main h3 {
+  margin: 4px 0;
+  color: white;
+  font-size: 21px;
+  letter-spacing: -.035em;
+}
+.public-profile-main p {
+  margin: 0;
+  color: #8f9298;
+  font-size: 11px;
+}
+.public-profile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 11px;
+}
+.public-profile-tags span {
+  padding: 6px 8px;
+  border: 1px solid #303136;
+  border-radius: 999px;
+  color: #b8bbc0;
+  background: #171719;
+  font-size: 8px;
+}
+.public-profile-details {
+  display: grid;
+  gap: 8px;
+  padding-left: 18px;
+  border-left: 1px solid #292a2d;
+}
+.public-profile-details div {
+  display: flex;
+  justify-content: space-between;
+  gap: 13px;
+}
+.public-profile-details span {
+  color: #777a81;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 800;
+}
+.public-profile-details strong {
+  max-width: 65%;
+  color: #d8d9dc;
+  text-align: right;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+@media (max-width: 780px) {
+  .public-user-profile {
+    margin: 0 18px 15px;
+    grid-template-columns: auto 1fr;
+  }
+  .public-profile-details {
+    grid-column: 1 / -1;
+    padding: 14px 0 0;
+    border-left: 0;
+    border-top: 1px solid #292a2d;
+  }
+}
+
+
+/* =========================================================
+   CONTATTI NOVAVISION
+   ========================================================= */
+.contacts-section {
+  margin: 0 clamp(18px,3vw,46px) 90px;
+  padding: clamp(36px,5vw,64px);
+  border: 1px solid #292a2d;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(0,168,243,.13), transparent 24rem),
+    #0b0b0c;
+}
+.contacts-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 28px;
+  margin-bottom: 30px;
+}
+.contacts-heading h2 {
+  margin: 10px 0 8px;
+  color: #f7f7f7;
+  font-size: clamp(34px,4.5vw,56px);
+  line-height: 1.02;
+  letter-spacing: -.055em;
+  font-weight: 900;
+}
+.contacts-heading p {
+  max-width: 720px;
+  margin: 0;
+  color: #92959b;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 14px;
+}
+.contact-card {
+  min-height: 150px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 15px;
+  border: 1px solid #2b2c30;
+  border-radius: 20px;
+  background: #111112;
+  transition: .2s ease;
+}
+.contact-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0,168,243,.46);
+  box-shadow: 0 18px 50px rgba(0,0,0,.26);
+}
+.contact-card-email {
+  background:
+    radial-gradient(circle at 88% 15%, rgba(0,168,243,.14), transparent 14rem),
+    #111112;
+}
+.contact-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: white;
+  background: var(--accent);
+}
+.contact-icon .icon {
+  width: 21px;
+  height: 21px;
+}
+.contact-label {
+  display: block;
+  color: #85888e;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-weight: 850;
+}
+.contact-card h3 {
+  margin: 7px 0 10px;
+  color: white;
+  font-size: 18px;
+  letter-spacing: -.03em;
+}
+.contact-card a {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.contact-card a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.site-footer {
+  margin: 0 clamp(18px,3vw,46px);
+  padding: 28px 0 38px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  border-top: 1px solid #27282b;
+}
+.footer-brand p {
+  margin: 7px 0 0;
+  color: #777a81;
+  font-size: 10px;
+}
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.footer-links a,
+.footer-links button {
+  border: 0;
+  padding: 0;
+  color: #92959b;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 750;
+  text-decoration: none;
+}
+.footer-links a:hover,
+.footer-links button:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 780px) {
+  .contacts-section {
+    margin: 0 10px 65px;
+    padding: 38px 18px;
+    border-radius: 25px;
+  }
+  .contacts-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+  .contacts-grid {
+    grid-template-columns: 1fr;
+  }
+  .contact-card {
+    min-height: 130px;
+  }
+  .site-footer {
+    margin: 0 18px 70px;
+    align-items: start;
+    flex-direction: column;
+  }
+  .footer-links {
+    align-items: start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE SYSTEM — DESKTOP, TABLET, MOBILE DRAWER
+   ========================================================= */
+html, body { max-width: 100%; overflow-x: hidden; }
+body.menu-open { overflow: hidden; touch-action: none; }
+main { overflow: clip; }
+img, video, iframe { max-width: 100%; }
+
+.hero, .category-strip, .pricing-section, .how-it-works,
+.advisor-promo, .cta-section, .contacts-section, .site-footer {
+  width: min(calc(100% - 92px), 1600px);
+  margin-left: auto;
+  margin-right: auto;
+}
+.section-wrap, .page-header, .dashboard-top, .discover-layout,
+.jobs-layout, #artistDashboard, #clientDashboard {
+  width: 100%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.messages-shell {
+  width: min(calc(100% - 156px), 1444px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mobile-menu-button {
+  display: none;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: #f3f3f3;
+  background: #101011;
+}
+.mobile-menu-button:hover { color: var(--accent); border-color: #3a3b3f; background: #171719; }
+
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 108;
+  visibility: hidden;
+  opacity: 0;
+  background: rgba(0,0,0,.68);
+  backdrop-filter: blur(5px);
+  transition: opacity .25s ease, visibility .25s ease;
+}
+.mobile-drawer-backdrop.open { visibility: visible; opacity: 1; }
+
+.mobile-drawer {
+  position: fixed;
+  z-index: 109;
+  top: 0;
+  right: 0;
+  width: min(390px, 92vw);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  color: #f5f5f5;
+  background: radial-gradient(circle at 88% 5%, rgba(0,168,243,.11), transparent 18rem), #0b0b0c;
+  border-left: 1px solid #2b2c30;
+  box-shadow: -28px 0 75px rgba(0,0,0,.5);
+  transform: translateX(104%);
+  transition: transform .28s cubic-bezier(.2,.8,.2,1);
+  overscroll-behavior: contain;
+}
+.mobile-drawer.open { transform: translateX(0); }
+
+.mobile-drawer-header {
+  min-height: 74px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #292a2d;
+}
+.mobile-drawer-brand { padding: 0; }
+.mobile-drawer-close {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #303136;
+  border-radius: 50%;
+  color: #d8d9dc;
+  background: #151516;
+}
+.mobile-drawer-close:hover { color: var(--accent); }
+
+.mobile-drawer-nav {
+  padding: 14px;
+  display: grid;
+  gap: 5px;
+  overflow-y: auto;
+}
+.mobile-drawer-nav > button {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: #a8abb0;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 750;
+}
+.mobile-drawer-nav > button:hover,
+.mobile-drawer-nav > button.active {
+  color: white;
+  background: #151516;
+  border-color: #292a2d;
+}
+.mobile-drawer-nav > button.active > .icon:first-child { color: var(--accent); }
+.drawer-arrow { width: 16px; height: 16px; color: #64676d; }
+
+.mobile-drawer-account {
+  margin-top: auto;
+  padding: 14px;
+  border-top: 1px solid #292a2d;
+}
+.mobile-guest-actions, .mobile-user-actions { display: grid; gap: 9px; }
+.mobile-guest-actions p { margin: 0 0 4px; color: #85888e; font-size: 10px; line-height: 1.5; }
+
+.mobile-user-card {
+  width: 100%;
+  padding: 11px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 11px;
+  border: 1px solid #2c2d31;
+  border-radius: 15px;
+  color: white;
+  background: #121213;
+  text-align: left;
+}
+.mobile-user-card > span:nth-child(2) { min-width: 0; }
+.mobile-user-card strong, .mobile-user-card small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mobile-user-card strong { font-size: 11px; }
+.mobile-user-card small { margin-top: 3px; color: #85888e; font-size: 8px; }
+.mobile-logout-action { gap: 8px; }
+
+.mobile-drawer-footer {
+  padding: 13px 14px calc(13px + env(safe-area-inset-bottom));
+  display: grid;
+  gap: 7px;
+  border-top: 1px solid #292a2d;
+}
+.mobile-drawer-footer a, .mobile-drawer-footer button {
+  min-height: 38px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  color: #888b91;
+  background: transparent;
+  font-size: 9px;
+  text-decoration: none;
+}
+.mobile-drawer-footer a:hover, .mobile-drawer-footer button:hover { color: var(--accent); }
+.mobile-nav { display: none !important; }
+
+@media (max-width: 1100px) {
+  .topbar { height: 70px; padding: 0 20px; gap: 18px; }
+  .desktop-nav { display: none !important; }
+  .mobile-menu-button { display: grid; }
+  .topbar-actions > #loginButton,
+  .topbar-actions > #registerButton,
+  .topbar-actions > #profileChip,
+  .topbar-actions > #logoutButton { display: none !important; }
+  .topbar-actions { gap: 8px; }
+
+  .hero, .category-strip, .pricing-section, .how-it-works,
+  .advisor-promo, .cta-section, .contacts-section, .site-footer {
+    width: min(calc(100% - 36px), 1040px);
+  }
+
+  .hero { grid-template-columns: 1fr; gap: 34px; min-height: auto; }
+  .hero-copy { max-width: 850px; }
+  .hero-visual { width: min(100%, 680px); min-height: 450px; margin: 0 auto; }
+
+  .artist-grid, .artist-list, .job-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pricing-grid, .pricing-grid-three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .free-card { grid-column: 1 / -1; }
+  .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .discover-layout { grid-template-columns: 1fr; }
+  .filter-panel { position: static; }
+  .job-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dashboard-grid { grid-template-columns: 1fr; }
+
+  .messages-shell {
+    width: min(calc(100% - 36px), 1040px);
+    grid-template-columns: 290px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  body { padding-bottom: 0 !important; }
+
+  .topbar { height: 64px; padding: 0 12px; }
+  .brand { gap: 8px; }
+  .brand-mark { width: 35px; height: 35px; border-radius: 11px; }
+  .brand-word { font-size: 18px; }
+  .topbar-actions { margin-left: auto; }
+  #notificationButton, .mobile-menu-button { width: 40px; height: 40px; }
+
+  .hero, .category-strip, .pricing-section, .how-it-works,
+  .advisor-promo, .cta-section, .contacts-section, .site-footer {
+    width: calc(100% - 16px);
+  }
+
+  .hero {
+    margin-top: 8px;
+    padding: 38px 16px 28px;
+    border-radius: 22px;
+    gap: 26px;
+  }
+  .hero h1 { max-width: 100%; font-size: clamp(39px,12.4vw,56px); line-height: .98; }
+  .hero-copy > p { font-size: 14px; line-height: 1.6; }
+  .hero-search { grid-template-columns: 1fr; padding: 8px; border-radius: 16px; }
+  .hero-search label { padding: 10px 11px; border-right: 0; border-bottom: 1px solid #292a2d; }
+  .hero-search label:last-of-type { border-bottom: 0; }
+  .hero-search label > span { margin-left: 25px; }
+  .hero-search input, .hero-search select { font-size: 16px; }
+  .btn-search { min-height: 50px; margin-top: 2px; }
+  .trust-row { gap: 11px 14px; font-size: 10px; }
+
+  .hero-visual { min-height: 345px; }
+  .stage-preview { inset: 14px 0 18px; transform: none; border-radius: 21px; }
+  .preview-topbar { min-height: 68px; padding: 13px; }
+  .preview-topbar strong { font-size: 15px; }
+  .live-pill { max-width: 126px; text-align: center; }
+  .preview-performance { height: 145px; margin: 11px; }
+  .performance-copy { left: 15px; bottom: 15px; }
+  .performance-copy strong { font-size: 22px; }
+  .performance-wave { right: 15px; bottom: 17px; transform: scale(.76); transform-origin: right bottom; }
+  .preview-list { padding: 0 11px 11px; }
+  .floating-card { min-width: 150px; padding: 10px 11px; }
+  .card-artist { top: 1px; left: -4px; transform: scale(.86); transform-origin: left top; }
+  .card-booking { right: -4px; bottom: 0; min-width: 190px; transform: scale(.86); transform-origin: right bottom; }
+
+  .stats { grid-template-columns: 1fr 1fr; margin: 15px 12px 0; }
+  .stats > div { padding: 15px 9px; }
+  .stats strong { font-size: 20px; }
+  .stats span { font-size: 8px; }
+
+  .category-strip { grid-template-columns: 1fr 1fr; padding: 8px; margin-top: 15px; }
+  .category-strip button { min-height: 48px; padding: 11px 9px; font-size: 11px; }
+
+  .section-wrap { padding: 58px 12px; }
+  .section-heading, .pricing-heading, .contacts-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .section-heading h2, .pricing-heading h2, .contacts-heading h2, .cta-section h2 {
+    font-size: clamp(30px,9.7vw,43px);
+  }
+
+  .artist-grid, .artist-list, .job-grid, .pricing-grid, .pricing-grid-three,
+  .steps-grid, .metric-grid, .contacts-grid { grid-template-columns: 1fr; }
+  .free-card { grid-column: auto; }
+  .artist-card, .job-card, .pricing-card, .contact-card { border-radius: 18px; }
+  .artist-cover { height: 185px; }
+
+  .pricing-section, .how-it-works, .advisor-promo, .cta-section, .contacts-section {
+    padding: 38px 16px;
+    border-radius: 22px;
+  }
+  .pricing-section { margin-top: 56px; margin-bottom: 56px; }
+  .billing-toggle { width: 100%; }
+  .billing-toggle button { flex: 1; }
+  .pricing-card { padding: 23px 18px; }
+
+  .advisor-promo { grid-template-columns: 1fr; }
+  .advisor-promo-icon { width: 58px; height: 58px; }
+  .advisor-promo .btn, .cta-section .btn, .contacts-heading .btn { width: 100%; }
+
+  .page-header, .dashboard-top {
+    padding: 34px 12px 17px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .page-header h1, .dashboard-top h1 { font-size: clamp(37px,11vw,50px); }
+
+  .discover-layout, .jobs-layout, #artistDashboard, #clientDashboard {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 64px;
+  }
+  .filter-panel, .job-filter-panel, .panel { padding: 16px; border-radius: 17px; }
+  .job-filter-grid { grid-template-columns: 1fr; }
+  .job-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 3px;
+    scrollbar-width: none;
+  }
+  .job-filters::-webkit-scrollbar { display: none; }
+  .chip { flex: 0 0 auto; }
+  .job-info { grid-template-columns: 1fr 1fr; }
+
+  .field input, .field select, .field textarea, .results-toolbar select,
+  .chat-compose input, .advisor-compose input { font-size: 16px; }
+  .form-grid, .social-buttons, .role-cards { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+
+  .modal-backdrop { padding: 8px; align-items: flex-end; }
+  .modal {
+    width: 100%;
+    max-height: calc(100dvh - 16px);
+    padding: 23px 16px calc(22px + env(safe-area-inset-bottom));
+    border-radius: 22px 22px 16px 16px;
+  }
+  .profile-modal { width: 100%; }
+  .profile-hero, .profile-columns { grid-template-columns: 1fr; }
+
+  .messages-shell {
+    width: calc(100% - 16px);
+    min-height: 0;
+    margin-bottom: 58px;
+    grid-template-columns: 1fr;
+    border-radius: 18px;
+  }
+  .conversation-list {
+    max-height: 238px;
+    overflow-y: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .chat-empty { min-height: 330px; }
+  .chat-content { min-height: 540px; }
+  .chat-messages { max-height: 430px; padding: 15px; }
+  .message-bubble { max-width: 86%; }
+  .chat-header { padding: 11px; }
+  .chat-header .btn { padding: 0 10px; font-size: 10px; }
+
+  .subscription-summary, .public-user-profile { margin-left: 12px; margin-right: 12px; }
+  .subscription-summary { align-items: stretch; flex-direction: column; }
+  .subscription-summary-actions { justify-content: space-between; }
+  .public-user-profile { grid-template-columns: auto 1fr; }
+  .public-profile-avatar { width: 64px; height: 64px; border-radius: 18px; }
+  .public-profile-details {
+    grid-column: 1 / -1;
+    padding: 14px 0 0;
+    border-left: 0;
+    border-top: 1px solid #292a2d;
+  }
+
+  .contact-card { min-height: 0; padding: 18px; }
+  .site-footer { margin-bottom: 20px; padding-bottom: 24px; }
+
+  .notification-panel { top: 61px; right: 8px; width: calc(100vw - 16px); }
+
+  .advisor-fab {
+    right: 12px;
+    bottom: 12px;
+    width: 49px;
+    height: 49px;
+    min-height: 49px;
+    padding: 0;
+    justify-content: center;
+  }
+  .advisor-fab span, .advisor-fab i { display: none; }
+  .advisor-chat {
+    right: 8px;
+    bottom: 70px;
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 84px);
+  }
+  .advisor-messages { height: min(290px,38dvh); }
+
+  .location-match-banner {
+    margin-left: 12px;
+    margin-right: 12px;
+    grid-template-columns: auto 1fr;
+  }
+  .location-match-banner .btn { grid-column: 1 / -1; width: 100%; }
+}
+
+@media (max-width: 420px) {
+  .topbar { padding: 0 9px; }
+  .brand-word { font-size: 16px; }
+  #notificationButton { display: none; }
+  .hero h1 { font-size: 39px; }
+  .hero-visual { min-height: 324px; }
+  .preview-list-head span { display: none; }
+  .preview-artist:last-child { display: none; }
+  .card-artist, .card-booking { transform: scale(.78); }
+  .stats strong { font-size: 18px; }
+  .category-strip button { font-size: 10px; }
+  .job-info { grid-template-columns: 1fr; }
+  .mobile-drawer { width: 94vw; }
+}
+
+
+/* =========================================================
+   TORNA SU — TUTTI I DEVICE
+   ========================================================= */
+.back-to-top {
+  position: fixed !important;
+  z-index: 9999;
+  left: 22px;
+  bottom: 22px;
+  min-height: 48px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #303136;
+  border-radius: 999px;
+  color: #f5f5f5;
+  background: rgba(15,15,16,.94);
+  box-shadow: 0 16px 44px rgba(0,0,0,.34);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition:
+    opacity .22s ease,
+    visibility .22s ease,
+    transform .22s ease,
+    color .18s ease,
+    border-color .18s ease,
+    background .18s ease;
+}
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.back-to-top:hover {
+  color: white;
+  border-color: rgba(0,168,243,.55);
+  background: var(--accent);
+}
+.back-to-top:focus-visible {
+  outline: 3px solid rgba(0,168,243,.26);
+  outline-offset: 3px;
+}
+.back-to-top .icon {
+  width: 18px;
+  height: 18px;
+}
+.back-to-top span {
+  font-size: 10px;
+  font-weight: 850;
+}
+
+@media (min-width: 701px) {
+  .back-to-top {
+    display: flex !important;
+    min-width: 114px;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .back-to-top {
+    left: 12px;
+    bottom: 12px;
+    width: 49px;
+    height: 49px;
+    min-height: 49px;
+    padding: 0;
+    justify-content: center;
+  }
+  .back-to-top span {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   LOGO NOVAVISION
+   ========================================================= */
+.brand-logo-wrap {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+  background: #080809;
+}
+.brand-logo-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.footer-brand-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.footer-logo-wrap {
+  width: 40px;
+  height: 40px;
+}
+
+@media (max-width: 700px) {
+  .brand-logo-wrap {
+    width: 36px;
+    height: 36px;
+  }
+  .footer-logo-wrap {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+
+/* =========================================================
+   SELETTORE LINGUA
+   ========================================================= */
+.language-switcher {
+  min-height: 40px;
+  padding: 0 9px 0 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #2c2d30;
+  border-radius: 999px;
+  color: #d7d8da;
+  background: #111112;
+}
+.language-switcher .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+.language-select {
+  min-width: 94px;
+  border: 0;
+  outline: 0;
+  color: #f2f2f2;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.language-select option {
+  color: #f5f5f5;
+  background: #111112;
+}
+.language-switcher:focus-within {
+  border-color: rgba(0,168,243,.58);
+  box-shadow: 0 0 0 3px rgba(0,168,243,.10);
+}
+
+.mobile-language-panel {
+  padding: 14px;
+  display: grid;
+  gap: 11px;
+  border-top: 1px solid #292a2d;
+  border-bottom: 1px solid #292a2d;
+  background: rgba(255,255,255,.012);
+}
+.mobile-language-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mobile-language-title > .icon {
+  width: 19px;
+  height: 19px;
+  color: var(--accent);
+}
+.mobile-language-title strong,
+.mobile-language-title small {
+  display: block;
+}
+.mobile-language-title strong {
+  color: white;
+  font-size: 11px;
+}
+.mobile-language-title small {
+  margin-top: 3px;
+  color: #7f8288;
+  font-size: 8px;
+}
+.mobile-language-select {
+  width: 100%;
+  min-height: 43px;
+  padding: 0 12px;
+  border: 1px solid #303136;
+  border-radius: 12px;
+  color: white;
+  background: #151516;
+  font-size: 12px;
+}
+
+@media (max-width: 1260px) and (min-width: 1101px) {
+  .desktop-language-switcher {
+    padding-left: 9px;
+  }
+  .desktop-language-switcher .language-select {
+    min-width: 73px;
+  }
+}
+@media (max-width: 1100px) {
+  .desktop-language-switcher {
+    display: none;
+  }
+}
+
+</style>
+  <script src="/env.js"></script>
+</head>
+<body>
+
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="icon-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M3 12h18"/></symbol>
+    <symbol id="icon-message" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></symbol>
+    <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7A2 2 0 0 1 22 16.9z"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="icon-logout" viewBox="0 0 24 24"><path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"/><path d="m15 16 4-4-4-4M19 12H9"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="icon-arrows" viewBox="0 0 24 24"><path d="M7 7h11l-3-3M17 17H6l3 3"/></symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="icon-euro" viewBox="0 0 24 24"><path d="M18 6.5A7 7 0 1 0 18 17.5M4 10h10M4 14h9"/></symbol>
+    <symbol id="icon-bolt" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="icon-music" viewBox="0 0 24 24"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></symbol>
+    <symbol id="icon-building" viewBox="0 0 24 24"><path d="M4 21V4h10v17M14 9h6v12M8 8h2M8 12h2M8 16h2M17 13h1M17 17h1M2 21h20"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 6l6 6-6 6"/></symbol>
+    <symbol id="icon-arrow-up" viewBox="0 0 24 24"><path d="M12 20V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="icon-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/></symbol>
+    <symbol id="icon-headset" viewBox="0 0 24 24"><path d="M4 14v-3a8 8 0 0 1 16 0v3"/><path d="M4 14a2 2 0 0 1 2-2h1v7H6a2 2 0 0 1-2-2zM20 14a2 2 0 0 0-2-2h-1v7h1a2 2 0 0 0 2-2zM17 19c0 2-2 2-5 2"/></symbol>
+    <symbol id="icon-lock-job" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+    <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M4 7h4l2-3h4l2 3h4v13H4z"/><circle cx="12" cy="13" r="4"/></symbol>
+    <symbol id="icon-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+    <symbol id="icon-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></symbol>
+    <symbol id="icon-location" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="icon-crown" viewBox="0 0 24 24"><path d="m3 7 4 4 5-7 5 7 4-4-2 11H5z"/><path d="M5 18h14"/></symbol>
+    <symbol id="icon-nearby" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+
+    <header class="topbar">
+      <button class="brand" data-route="home" aria-label="NovaVision home">
+        <span class="brand-logo-wrap">
+          <img src="novavision-logo.png" alt="Logo NovaVision" class="brand-logo-image" />
+        </span>
+        <span class="brand-word">Nova<span>Vision</span></span>
+      </button>
+
+      <nav class="desktop-nav" aria-label="Navigazione principale">
+        <button class="nav-link active" data-route="home">Home</button>
+        <button class="nav-link" data-route="discover">Esplora artisti</button>
+        <button class="nav-link" data-route="jobs">Opportunità</button>
+        <button class="nav-link" data-route="messages">Messaggi</button>
+        <button class="nav-link" type="button" data-scroll-contact>Contatti</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <label class="language-switcher desktop-language-switcher" aria-label="Cambia lingua">
+          <svg class="icon"><use href="#icon-globe"></use></svg>
+          <select class="language-select" data-language-select aria-label="Lingua">
+            <option value="auto">Automatico</option>
+            <option value="it">Italiano</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <button class="icon-btn" id="notificationButton" aria-label="Notifiche">
+          <svg class="icon"><use href="#icon-bell"></use></svg><span class="badge">3</span>
+        </button>
+          <a class="btn btn-ghost" id="loginButton" href="/?auth=login">Accedi</a>
+        <button class="btn btn-primary" id="registerButton">Inizia ora</button>
+        <button class="profile-chip hidden" id="profileChip">
+          <span class="avatar avatar-small" id="profileAvatar">DC</span>
+          <span id="profileName">Dan</span>
+        </button>
+        <button class="logout-button hidden" id="logoutButton" type="button" aria-label="Esci dall'account">
+          <svg class="icon"><use href="#icon-logout"></use></svg>
+          <span>Esci</span>
+        </button>
+        <button class="mobile-menu-button" id="mobileMenuButton" type="button"
+                aria-label="Apri menu" aria-controls="mobileDrawer" aria-expanded="false">
+          <svg class="icon"><use href="#icon-menu"></use></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
+    <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true" aria-label="Menu principale">
+      <header class="mobile-drawer-header">
+        <button class="brand mobile-drawer-brand" data-route="home" aria-label="NovaVision home">
+          <span class="brand-logo-wrap">
+            <img src="novavision-logo.png" alt="Logo NovaVision" class="brand-logo-image" />
+          </span>
+          <span class="brand-word">Nova<span>Vision</span></span>
+        </button>
+        <button class="mobile-drawer-close" id="mobileDrawerClose" type="button" aria-label="Chiudi menu">
+          <svg class="icon"><use href="#icon-close"></use></svg>
+        </button>
+      </header>
+
+      <nav class="mobile-drawer-nav" aria-label="Navigazione mobile">
+        <button class="active" data-route="home">
+          <svg class="icon"><use href="#icon-home"></use></svg><span>Home</span>
+          <svg class="icon drawer-arrow"><use href="#icon-arrow"></use></svg>
+        </button>
+        <button data-route="discover">
+          <svg class="icon"><use href="#icon-search"></use></svg><span>Esplora artisti</span>
+          <svg class="icon drawer-arrow"><use href="#icon-arrow"></use></svg>
+        </button>
+        <button data-route="jobs">
+          <svg class="icon"><use href="#icon-briefcase"></use></svg><span>Opportunità</span>
+          <svg class="icon drawer-arrow"><use href="#icon-arrow"></use></svg>
+        </button>
+        <button data-route="messages">
+          <svg class="icon"><use href="#icon-message"></use></svg><span>Messaggi</span>
+          <svg class="icon drawer-arrow"><use href="#icon-arrow"></use></svg>
+        </button>
+        <button data-route="dashboard">
+          <svg class="icon"><use href="#icon-user"></use></svg><span>Dashboard</span>
+          <svg class="icon drawer-arrow"><use href="#icon-arrow"></use></svg>
+        </button>
+        <button type="button" data-scroll-contact>
+          <svg class="icon"><use href="#icon-phone"></use></svg><span>Contatti</span>
+          <svg class="icon drawer-arrow"><use href="#icon-arrow"></use></svg>
+        </button>
+      </nav>
+
+      <section class="mobile-language-panel">
+        <div class="mobile-language-title">
+          <svg class="icon"><use href="#icon-globe"></use></svg>
+          <div>
+            <strong>Lingua</strong>
+            <small>Automatico usa la lingua del dispositivo</small>
+          </div>
+        </div>
+        <select class="language-select mobile-language-select" data-language-select aria-label="Lingua">
+          <option value="auto">Automatico</option>
+          <option value="it">Italiano</option>
+          <option value="en">English</option>
+        </select>
+      </section>
+
+      <section class="mobile-drawer-account">
+        <div class="mobile-guest-actions" id="mobileGuestActions">
+          <p>Accedi per gestire profilo, annunci e messaggi.</p>
+          <button class="btn btn-primary btn-block" type="button" data-mobile-register>Crea account</button>
+            <a class="btn btn-secondary btn-block" href="/?auth=login" data-mobile-login>Accedi</a>
+        </div>
+
+        <div class="mobile-user-actions hidden" id="mobileUserActions">
+          <button class="mobile-user-card" type="button" data-route="dashboard">
+            <span class="avatar" id="mobileProfileAvatar">NV</span>
+            <span>
+              <strong id="mobileProfileName">Utente NovaVision</strong>
+              <small id="mobileProfileRole">Profilo personale</small>
+            </span>
+            <svg class="icon drawer-arrow"><use href="#icon-arrow"></use></svg>
+          </button>
+          <button class="btn btn-secondary btn-block mobile-logout-action" type="button" data-mobile-logout>
+            <svg class="icon"><use href="#icon-logout"></use></svg>
+            Esci
+          </button>
+        </div>
+      </section>
+
+      <footer class="mobile-drawer-footer">
+        <a href="mailto:info@novavisionmgmt.com">
+          <svg class="icon"><use href="#icon-mail"></use></svg>
+          info@novavisionmgmt.com
+        </a>
+        <button type="button" data-open-advisor>
+          <svg class="icon"><use href="#icon-headset"></use></svg>
+          Consulente evento
+        </button>
+      </footer>
+    </aside>
+
+    <main>
+      <section class="page active" id="page-home">
+
+        <section class="hero">
+          <div class="hero-orbit orbit-a"></div>
+          <div class="hero-orbit orbit-b"></div>
+
+          <div class="hero-copy">
+            <span class="eyebrow eyebrow-light">Artist Booking & Management</span>
+            <h1>Il talento giusto.<br><span>Per ogni evento.</span></h1>
+            <p>NovaVision mette in contatto diretto artisti verificati e clienti. Ricerca per città, data, stile e budget. Tratta e prenota in un unico spazio.</p>
+
+            <form class="hero-search" id="heroSearchForm">
+              <label>
+                <span>Località</span>
+                <div class="input-with-icon">
+                  <svg class="icon"><use href="#icon-pin"></use></svg>
+                  <input id="heroCity" type="text" placeholder="Milano, Monza, Roma…" value="Milano" />
+                </div>
+              </label>
+              <label>
+                <span>Professionista</span>
+                <div class="input-with-icon">
+                  <svg class="icon"><use href="#icon-search"></use></svg>
+                  <select id="heroCategory">
+                    <option value="">Tutte le categorie</option>
+                    <option>Musicista</option>
+                    <option>DJ</option>
+                    <option>Cantante</option>
+                    <option>Band</option>
+                    <option>Tecnico audio</option>
+                  </select>
+                </div>
+              </label>
+              <label>
+                <span>Data evento</span>
+                <div class="input-with-icon">
+                  <svg class="icon"><use href="#icon-calendar"></use></svg>
+                  <input id="heroDate" type="date" />
+                </div>
+              </label>
+              <button class="btn btn-accent btn-search" type="submit">
+                Cerca
+                <svg class="icon"><use href="#icon-arrow"></use></svg>
+              </button>
+            </form>
+
+            <div class="trust-row">
+              <span><svg class="icon"><use href="#icon-check"></use></svg> Profili verificati</span>
+              <span><svg class="icon"><use href="#icon-lock"></use></svg> Pagamenti protetti</span>
+              <span><svg class="icon"><use href="#icon-message"></use></svg> Contatto diretto</span>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="stage-preview">
+              <div class="preview-topbar">
+                <div>
+                  <span class="preview-kicker">Sabato 12 luglio</span>
+                  <strong>Live jazz · Milano</strong>
+                </div>
+                <span class="live-pill"><i></i> 12 artisti disponibili</span>
+              </div>
+
+              <div class="preview-performance">
+                <div class="performance-copy">
+                  <span>In evidenza</span>
+                  <strong>Laura Milesi</strong>
+                  <small>Voce jazz & soul · da €420</small>
+                </div>
+                <div class="performance-wave">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+              </div>
+
+              <div class="preview-list">
+                <div class="preview-list-head">
+                  <strong>Match consigliati</strong>
+                  <span>Milano · 12 luglio</span>
+                </div>
+                <div class="preview-artist">
+                  <span class="avatar gradient-2">NB</span>
+                  <div><strong>Niko Bianchi</strong><span>DJ · 4,8</span></div>
+                  <b>€550</b>
+                </div>
+                <div class="preview-artist">
+                  <span class="avatar gradient-4">GF</span>
+                  <div><strong>Giulia Ferri</strong><span>Tecnico audio · 4,9</span></div>
+                  <b>€330</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="floating-card card-artist">
+              <span class="mini-label">Richiesta ricevuta</span>
+              <strong>Terrazza Duomo</strong>
+              <span>Cena aziendale · €450</span>
+            </div>
+
+            <div class="floating-card card-booking">
+              <span class="booking-icon"><svg class="icon"><use href="#icon-check"></use></svg></span>
+              <div>
+                <strong>Prenotazione confermata</strong>
+                <span>Pagamento protetto</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats">
+          <div><strong>2.400+</strong><span>professionisti attivi</span></div>
+          <div><strong>180+</strong><span>città raggiunte</span></div>
+          <div><strong>4,9/5</strong><span>valutazione media</span></div>
+          <div><strong>Diretto</strong><span>nessuna agenzia</span></div>
+        </section>
+
+        <section class="category-strip" aria-label="Categorie">
+          <button data-category-shortcut="Musicista"><span>01</span> Musicisti</button>
+          <button data-category-shortcut="DJ"><span>02</span> DJ</button>
+          <button data-category-shortcut="Cantante"><span>03</span> Cantanti</button>
+          <button data-category-shortcut="Band"><span>04</span> Band</button>
+          <button data-category-shortcut="Tecnico audio"><span>05</span> Tecnici audio</button>
+        </section>
+
+        <section class="pricing-section" id="pricing">
+          <div class="pricing-heading">
+            <div>
+              <span class="eyebrow">Piani NovaVision</span>
+              <h2>Parti gratis.<br><span>Cresci senza intermediari.</span></h2>
+              <p>Ogni utente deve registrarsi per aprire gli annunci. Il piano Free non richiede carta.</p>
+            </div>
+            <div class="billing-toggle" aria-label="Frequenza pagamento">
+              <button class="active" type="button" data-pricing-cycle="monthly">Mensile</button>
+              <button type="button" data-pricing-cycle="annual">Annuale <small>risparmia</small></button>
+            </div>
+          </div>
+
+          <div class="pricing-grid pricing-grid-three">
+            <article class="pricing-card free-card">
+              <div class="pricing-card-head">
+                <span class="plan-icon"><svg class="icon"><use href="#icon-user"></use></svg></span>
+                <span class="plan-label">Per artisti e clienti</span>
+              </div>
+              <h3>Free account</h3>
+              <p>Registrazione gratuita. Nessuna intermediazione sul compenso.</p>
+              <div class="plan-price-row">
+                <strong>€0</strong>
+                <span>per sempre</span>
+              </div>
+              <ul>
+                <li>Profilo con foto e dati anagrafici</li>
+                <li>Contatti, strumento e competenze</li>
+                <li>Formazione musicale e diploma</li>
+                <li>Accesso agli annunci pubblicati</li>
+                <li>Filtri per luogo, data, genere, strumento e budget</li>
+                <li>Candidatura diretta agli annunci</li>
+              </ul>
+              <button class="btn btn-secondary btn-block" type="button" data-start-free>
+                Crea account Free
+              </button>
+            </article>
+
+            <article class="pricing-card" data-pricing-card="artist">
+              <div class="pricing-card-head">
+                <span class="plan-icon"><svg class="icon"><use href="#icon-music"></use></svg></span>
+                <span class="plan-label">Premium artista</span>
+              </div>
+              <h3>Artista</h3>
+              <p>Profilo avanzato, calendario, preventivi, chat e maggiore visibilità.</p>
+              <div class="plan-price-row">
+                <strong id="artistPlanPrice">€2</strong>
+                <span id="artistPlanPeriod">/mese</span>
+              </div>
+              <div class="annual-saving hidden" id="artistAnnualSaving">Risparmi €5 ogni anno</div>
+              <ul>
+                <li>Tutto del piano Free</li>
+                <li>Calendario disponibilità</li>
+                <li>Richieste e controproposte</li>
+                <li>Priorità nei risultati locali</li>
+              </ul>
+              <button class="btn btn-secondary btn-block" type="button" data-start-plan="artist">
+                Premium artista
+              </button>
+            </article>
+
+            <article class="pricing-card featured" data-pricing-card="client">
+              <span class="recommended-plan">Più scelto</span>
+              <div class="pricing-card-head">
+                <span class="plan-icon"><svg class="icon"><use href="#icon-building"></use></svg></span>
+                <span class="plan-label">Premium cliente</span>
+              </div>
+              <h3>Cliente</h3>
+              <p>Ricerca artisti, pubblicazione annunci, preventivi e prenotazioni organizzate.</p>
+              <div class="plan-price-row">
+                <strong id="clientPlanPrice">€3</strong>
+                <span id="clientPlanPeriod">/mese</span>
+              </div>
+              <div class="annual-saving hidden" id="clientAnnualSaving">Risparmi €7 ogni anno</div>
+              <ul>
+                <li>Tutto del piano Free</li>
+                <li>Pubblicazione annunci</li>
+                <li>Contatto diretto con artisti</li>
+                <li>Gestione preventivi e prenotazioni</li>
+              </ul>
+              <button class="btn btn-primary btn-block" type="button" data-start-plan="client">
+                Premium cliente
+              </button>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-wrap">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">Scelti vicino a te</span>
+              <h2>Artisti disponibili a Milano</h2>
+            </div>
+            <button class="text-link" data-route="discover">Vedi tutti →</button>
+          </div>
+          <div class="artist-grid" id="featuredArtists"></div>
+        </section>
+
+
+        <section class="advisor-promo">
+          <div class="advisor-promo-icon">
+            <svg class="icon"><use href="#icon-headset"></use></svg>
+          </div>
+          <div>
+            <span class="eyebrow">Consulenza evento</span>
+            <h2>Un esperto NovaVision per ogni necessità.</h2>
+            <p>Dubbi su artista, budget, repertorio, impianto audio, tempi o organizzazione? Apri la chat e chiedi supporto per il tuo evento.</p>
+          </div>
+          <button class="btn btn-primary" type="button" data-open-advisor>
+            Parla con un consulente
+            <svg class="icon"><use href="#icon-message"></use></svg>
+          </button>
+        </section>
+
+        <section class="section-wrap how-it-works">
+          <div class="section-heading process-heading">
+            <div>
+              <span class="eyebrow">What we do</span>
+              <h2>Dalla ricerca alla conferma.<br>Solo passaggi utili.</h2>
+            </div>
+            <p>NovaVision centralizza scoperta, contatto, preventivo e prenotazione. Artista e cliente mantengono controllo completo.</p>
+          </div>
+          <div class="steps-grid">
+            <article>
+              <span class="step-number">01</span>
+              <div class="step-icon"><svg class="icon"><use href="#icon-search"></use></svg></div>
+              <h3>Trova il match</h3>
+              <p>Filtra per zona, categoria, data, prezzo e disponibilità reale.</p>
+            </article>
+            <article>
+              <span class="step-number">02</span>
+              <div class="step-icon"><svg class="icon"><use href="#icon-arrows"></use></svg></div>
+              <h3>Definisci l’accordo</h3>
+              <p>Chat diretta, preventivo trasparente e possibilità di controproposta.</p>
+            </article>
+            <article>
+              <span class="step-number">03</span>
+              <div class="step-icon"><svg class="icon"><use href="#icon-check"></use></svg></div>
+              <h3>Conferma l’evento</h3>
+              <p>Prenotazione ordinata, pagamento protetto e dettagli sempre disponibili.</p>
+            </article>
+          </div>
+        </section>
+
+
+        <section class="cta-section">
+          <div>
+            <span class="eyebrow eyebrow-light">NovaVision · Per professionisti</span>
+            <h2>Trasforma disponibilità e talento in nuove opportunità.</h2>
+            <p>Profilo, aree di lavoro, compenso, calendario e richieste: tutto sotto controllo.</p>
+          </div>
+          <button class="btn btn-accent" data-open-register="artist">
+            Crea profilo artista
+            <svg class="icon"><use href="#icon-arrow"></use></svg>
+          </button>
+        </section>
+
+
+        <section class="contacts-section" id="contatti">
+          <div class="contacts-heading">
+            <div>
+              <span class="eyebrow">Contatti NovaVision</span>
+              <h2>Parliamo del tuo progetto.</h2>
+              <p>Per eventi, collaborazioni, produzione artistica, marketing e informazioni sulla piattaforma.</p>
+            </div>
+            <a class="btn btn-primary" href="mailto:info@novavisionmgmt.com">
+              <svg class="icon"><use href="#icon-mail"></use></svg>
+              info@novavisionmgmt.com
+            </a>
+          </div>
+
+          <div class="contacts-grid">
+            <article class="contact-card contact-card-email">
+              <span class="contact-icon">
+                <svg class="icon"><use href="#icon-mail"></use></svg>
+              </span>
+              <div>
+                <span class="contact-label">Email generale</span>
+                <h3>NovaVision Management</h3>
+                <a href="mailto:info@novavisionmgmt.com">info@novavisionmgmt.com</a>
+              </div>
+            </article>
+
+            <article class="contact-card">
+              <span class="contact-icon">
+                <svg class="icon"><use href="#icon-phone"></use></svg>
+              </span>
+              <div>
+                <span class="contact-label">Artists &amp; Performers Manager</span>
+                <h3>Eugenio Mangini</h3>
+                <a href="tel:+393426220391">342 622 0391</a>
+              </div>
+            </article>
+
+            <article class="contact-card">
+              <span class="contact-icon">
+                <svg class="icon"><use href="#icon-phone"></use></svg>
+              </span>
+              <div>
+                <span class="contact-label">Direzione e produzione artistica</span>
+                <h3>Filippo Ravasio</h3>
+                <a href="tel:+393271156830">327 115 6830</a>
+              </div>
+            </article>
+
+            <article class="contact-card">
+              <span class="contact-icon">
+                <svg class="icon"><use href="#icon-phone"></use></svg>
+              </span>
+              <div>
+                <span class="contact-label">Responsabile Marketing &amp; PR</span>
+                <h3>Daniel Calzone</h3>
+                <a href="tel:+393519001260">351 900 1260</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+      </section>
+
+      <section class="page" id="page-discover">
+        <div class="page-header">
+          <div>
+            <span class="eyebrow">Ricerca avanzata</span>
+            <h1>Trova artisti</h1>
+            <p>Disponibilità verificata, contatto diretto, nessuna agenzia.</p>
+          </div>
+          <button class="btn btn-secondary" id="toggleMapButton">Mostra mappa</button>
+        </div>
+
+        <div class="location-match-banner hidden" id="artistLocationBanner">
+          <div class="location-match-icon"><svg class="icon"><use href="#icon-nearby"></use></svg></div>
+          <div>
+            <strong id="artistLocationTitle">Artisti vicino a te</strong>
+            <span id="artistLocationText">Posizione non ancora rilevata.</span>
+          </div>
+          <button class="btn btn-secondary btn-small" type="button" data-refresh-location>Aggiorna posizione</button>
+        </div>
+
+        <div class="discover-layout">
+          <aside class="filter-panel">
+            <div class="filter-title">
+              <h3>Filtri</h3>
+              <button class="text-link" id="resetFilters">Azzera</button>
+            </div>
+            <label class="field">
+              <span>Città o zona</span>
+              <input id="filterCity" type="text" placeholder="Es. Milano" />
+            </label>
+            <label class="field">
+              <span>Categoria</span>
+              <select id="filterCategory">
+                <option value="">Tutte</option>
+                <option>Musicista</option>
+                <option>DJ</option>
+                <option>Cantante</option>
+                <option>Band</option>
+                <option>Tecnico audio</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Data evento</span>
+              <input id="filterDate" type="date" />
+            </label>
+            <label class="field">
+              <span>Compenso massimo: <strong id="priceValue">€800</strong></span>
+              <input id="filterPrice" type="range" min="100" max="1500" step="50" value="800" />
+            </label>
+            <label class="toggle-row">
+              <input id="filterVerified" type="checkbox" />
+              <span>Solo profili verificati</span>
+            </label>
+            <label class="toggle-row">
+              <input id="filterAvailable" type="checkbox" checked />
+              <span>Solo disponibili</span>
+            </label>
+          </aside>
+
+          <div class="results-panel">
+            <div class="results-toolbar">
+              <span id="resultsCount">0 artisti trovati</span>
+              <select id="sortArtists" aria-label="Ordina risultati">
+                <option value="recommended">Consigliati</option>
+                <option value="rating">Valutazione</option>
+                <option value="priceAsc">Prezzo crescente</option>
+                <option value="priceDesc">Prezzo decrescente</option>
+              </select>
+            </div>
+            <div class="map-panel hidden" id="mapPanel">
+              <div class="map-grid"></div>
+              <div id="mapMarkers"></div>
+              <div class="map-label label-milano">Milano</div>
+              <div class="map-label label-monza">Monza</div>
+              <div class="map-label label-rho">Rho</div>
+            </div>
+            <div class="artist-list" id="artistResults"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-jobs">
+        <div class="page-header">
+          <div>
+            <span class="eyebrow">Opportunità</span>
+            <h1>Annunci di lavoro</h1>
+            <p>Eventi pubblicati da locali, hotel, aziende e privati.</p>
+          </div>
+          <button class="btn btn-primary" id="publishJobButton">Pubblica annuncio</button>
+        </div>
+
+        <div class="location-match-banner hidden" id="clientLocationBanner">
+          <div class="location-match-icon"><svg class="icon"><use href="#icon-nearby"></use></svg></div>
+          <div>
+            <strong id="clientLocationTitle">Clienti e opportunità vicino a te</strong>
+            <span id="clientLocationText">Posizione non ancora rilevata.</span>
+          </div>
+          <button class="btn btn-secondary btn-small" type="button" data-refresh-location>Aggiorna posizione</button>
+        </div>
+
+        <div class="jobs-layout">
+          <section class="job-filter-panel">
+            <div class="job-filter-heading">
+              <div>
+                <svg class="icon"><use href="#icon-filter"></use></svg>
+                <strong>Filtra annunci</strong>
+              </div>
+              <button class="text-link" id="resetJobFilters" type="button">Azzera filtri</button>
+            </div>
+            <div class="job-filter-grid">
+              <label class="field">
+                <span>Luogo</span>
+                <input id="jobFilterCity" placeholder="Milano, Roma…" />
+              </label>
+              <label class="field">
+                <span>Data</span>
+                <input id="jobFilterDate" type="date" />
+              </label>
+              <label class="field">
+                <span>Genere musicale</span>
+                <select id="jobFilterGenre">
+                  <option value="">Tutti</option>
+                  <option>Jazz</option>
+                  <option>Pop</option>
+                  <option>Dance</option>
+                  <option>Soul</option>
+                  <option>Lounge</option>
+                  <option>Corporate</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Strumento / ruolo</span>
+                <select id="jobFilterInstrument">
+                  <option value="">Tutti</option>
+                  <option>Voce</option>
+                  <option>Sassofono</option>
+                  <option>Chitarra</option>
+                  <option>Pianoforte</option>
+                  <option>Band</option>
+                  <option>Console DJ</option>
+                  <option>Tecnico audio</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Budget minimo</span>
+                <input id="jobFilterBudget" type="number" min="0" step="50" placeholder="€300" />
+              </label>
+            </div>
+          </section>
+
+          <div class="job-filters">
+            <button class="chip active" data-job-filter="all">Tutti</button>
+            <button class="chip" data-job-filter="Milano">Milano</button>
+            <button class="chip" data-job-filter="Roma">Roma</button>
+            <button class="chip" data-job-filter="DJ">DJ</button>
+            <button class="chip" data-job-filter="Band">Band</button>
+          </div>
+          <div class="job-grid" id="jobGrid"></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-messages">
+        <div class="page-header compact">
+          <div>
+            <span class="eyebrow">Contatti diretti</span>
+            <h1>Messaggi</h1>
+          </div>
+        </div>
+
+        <div class="messages-shell">
+          <aside class="conversation-list" id="conversationList"></aside>
+          <section class="chat-panel">
+            <div class="chat-empty" id="chatEmpty">
+              <div class="empty-icon"><svg class="icon"><use href="#icon-message"></use></svg></div>
+              <h3>Seleziona una conversazione</h3>
+              <p>Parla direttamente con artista o cliente.</p>
+            </div>
+            <div class="chat-content hidden" id="chatContent">
+              <header class="chat-header">
+                <div class="avatar gradient-2" id="chatAvatar">LM</div>
+                <div>
+                  <strong id="chatName">Laura Milesi</strong>
+                  <span>Online ora</span>
+                </div>
+                <button class="btn btn-secondary btn-small" id="chatBookingButton">Crea preventivo</button>
+              </header>
+              <div class="chat-messages" id="chatMessages"></div>
+              <form class="chat-compose" id="chatForm">
+                <button type="button" class="icon-btn"><svg class="icon"><use href="#icon-plus"></use></svg></button>
+                <input id="chatInput" placeholder="Scrivi un messaggio…" autocomplete="off" />
+                <button class="btn btn-primary" type="submit">Invia</button>
+              </form>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="page-dashboard">
+        <div class="dashboard-top">
+          <div>
+            <span class="eyebrow" id="dashboardEyebrow">Area personale</span>
+            <h1 id="dashboardTitle">Dashboard artista</h1>
+            <p id="dashboardSubtitle">Gestisci richieste, disponibilità e profilo.</p>
+          </div>
+          <div class="role-switch">
+            <button class="active" data-dashboard-role="artist">Artista</button>
+            <button data-dashboard-role="client">Cliente</button>
+          </div>
+        </div>
+
+        <section class="subscription-summary panel hidden" id="subscriptionSummary">
+          <div class="subscription-summary-main">
+            <span class="subscription-symbol"><svg class="icon"><use href="#icon-crown"></use></svg></span>
+            <div>
+              <span class="subscription-kicker">Abbonamento attivo</span>
+              <strong id="subscriptionSummaryTitle">Piano artista mensile</strong>
+              <small id="subscriptionSummaryMeta">€2 al mese · rinnovo automatico</small>
+            </div>
+          </div>
+          <div class="subscription-summary-actions">
+            <span class="subscription-status">Attivo</span>
+            <button class="btn btn-secondary btn-small" id="manageSubscriptionButton" type="button">Cambia piano</button>
+          </div>
+        </section>
+
+        <section class="public-user-profile panel hidden" id="publicUserProfile">
+          <div class="public-profile-avatar" id="publicProfileAvatar">NV</div>
+          <div class="public-profile-main">
+            <span class="subscription-kicker">Profilo NovaVision</span>
+            <h3 id="publicProfileName">Nome utente</h3>
+            <p id="publicProfileHeadline">Profilo professionale</p>
+            <div class="public-profile-tags" id="publicProfileTags"></div>
+          </div>
+          <div class="public-profile-details" id="publicProfileDetails"></div>
+        </section>
+
+        <div id="artistDashboard">
+          <div class="metric-grid">
+            <article><span>Richieste attive</span><strong id="metricRequests">4</strong><small>+2 questa settimana</small></article>
+            <article><span>Prenotazioni mese</span><strong>7</strong><small>€2.430 previsti</small></article>
+            <article><span>Visualizzazioni profilo</span><strong>186</strong><small>+18% ultimi 30 giorni</small></article>
+            <article><span>Valutazione</span><strong>4,9</strong><small>32 recensioni verificate</small></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h3>Richieste ricevute</h3>
+                <button class="text-link" data-route="messages">Apri messaggi</button>
+              </div>
+              <div id="artistRequests"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <h3>Disponibilità</h3>
+                <button class="text-link" id="editAvailabilityButton">Modifica</button>
+              </div>
+              <div class="mini-calendar" id="availabilityCalendar"></div>
+              <div class="calendar-legend">
+                <span><i class="legend-free"></i>Disponibile</span>
+                <span><i class="legend-busy"></i>Occupato</span>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div class="hidden" id="clientDashboard">
+          <div class="metric-grid">
+            <article><span>Annunci attivi</span><strong>3</strong><small>18 candidature totali</small></article>
+            <article><span>Prenotazioni</span><strong>5</strong><small>2 in arrivo</small></article>
+            <article><span>Budget impegnato</span><strong>€1.850</strong><small>Pagamenti protetti</small></article>
+            <article><span>Preferiti</span><strong id="favoriteMetric">0</strong><small>Artisti salvati</small></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h3>Le tue richieste</h3>
+                <button class="text-link" id="newRequestButton">Nuova richiesta</button>
+              </div>
+              <div id="clientRequests"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <h3>Artisti preferiti</h3>
+                <button class="text-link" data-route="discover">Cerca artisti</button>
+              </div>
+              <div id="favoriteArtists"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <div class="footer-brand-top">
+          <span class="brand-logo-wrap footer-logo-wrap">
+            <img src="novavision-logo.png" alt="Logo NovaVision" class="brand-logo-image" />
+          </span>
+          <span class="brand-word">Nova<span>Vision</span></span>
+        </div>
+        <p>Marketplace diretto per artisti, clienti ed eventi.</p>
+      </div>
+      <div class="footer-links">
+        <a href="mailto:info@novavisionmgmt.com">info@novavisionmgmt.com</a>
+        <button type="button" data-scroll-contact>Contatti</button>
+      </div>
+    </footer>
+
+    <nav class="mobile-nav" aria-label="Navigazione mobile">
+      <button class="active" data-route="home"><svg class="icon"><use href="#icon-home"></use></svg><span>Home</span></button>
+      <button data-route="discover"><svg class="icon"><use href="#icon-search"></use></svg><span>Cerca</span></button>
+      <button data-route="jobs"><svg class="icon"><use href="#icon-briefcase"></use></svg><span>Annunci</span></button>
+      <button data-route="messages"><svg class="icon"><use href="#icon-message"></use></svg><span>Chat</span></button>
+      <button data-route="dashboard"><svg class="icon"><use href="#icon-user"></use></svg><span>Profilo</span></button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop hidden" id="jobGateModal">
+    <div class="modal gate-modal">
+      <button class="modal-close" data-close-modal="jobGateModal">×</button>
+      <div class="gate-icon">
+        <svg class="icon"><use href="#icon-lock-job"></use></svg>
+      </div>
+      <div class="modal-heading">
+        <span class="eyebrow">Area riservata</span>
+        <h2>Registrati per aprire gli annunci</h2>
+        <p>Artisti e clienti devono avere un account NovaVision. Il piano Free è sufficiente e non richiede carta.</p>
+      </div>
+      <div class="gate-actions">
+        <button class="btn btn-primary btn-block" id="gateRegisterButton" type="button">Crea account Free</button>
+        <a class="btn btn-secondary btn-block" id="gateLoginButton" href="/?auth=login">Ho già un account</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="authModal">
+    <div class="modal auth-modal">
+      <button class="modal-close" data-close-modal="authModal">×</button>
+      <div class="modal-heading">
+        <span class="eyebrow">Entra in NovaVision</span>
+        <h2 id="authModalTitle">Crea il tuo account</h2>
+        <p>Contatto diretto. Nessuna agenzia.</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="active" data-auth-mode="register">Registrati</button>
+        <button data-auth-mode="login">Accedi</button>
+      </div>
+      <div class="role-cards" id="roleCards">
+        <button class="active" data-role="artist">
+          <span class="role-icon"><svg class="icon"><use href="#icon-music"></use></svg></span>
+          <strong>Sono un artista</strong>
+          <small>Mostra il tuo talento e ricevi richieste</small>
+        </button>
+        <button data-role="client">
+          <span class="role-icon"><svg class="icon"><use href="#icon-building"></use></svg></span>
+          <strong>Sono un cliente</strong>
+          <small>Trova artisti per il tuo evento</small>
+        </button>
+      </div>
+
+      <div class="plan-tier-selector" id="planTierSelector" aria-label="Tipo di account">
+        <button class="active" type="button" data-auth-tier="free">
+          <strong>Free account</strong>
+          <small>€0 per sempre · nessuna carta</small>
+        </button>
+        <button type="button" data-auth-tier="premium">
+          <strong>Premium</strong>
+          <small>Funzioni avanzate e maggiore visibilità</small>
+        </button>
+      </div>
+
+      <div class="subscription-chooser" id="subscriptionChooser">
+        <div class="subscription-chooser-top">
+          <div>
+            <span>Abbonamento</span>
+            <strong id="authPlanName">Piano artista</strong>
+          </div>
+          <div class="billing-toggle compact">
+            <button class="active" type="button" data-auth-cycle="monthly">Mensile</button>
+            <button type="button" data-auth-cycle="annual">Annuale</button>
+          </div>
+        </div>
+        <div class="auth-plan-price">
+          <strong id="authPlanPrice">€2</strong>
+          <span id="authPlanPeriod">al mese</span>
+          <small id="authPlanSaving"></small>
+        </div>
+      </div>
+
+      <form id="authForm">
+        <div class="form-grid">
+          <label class="field">
+            <span>Nome</span>
+            <input id="authName" required placeholder="Nome o attività" />
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input id="authEmail" type="email" required placeholder="nome@email.it" />
+          </label>
+          <label class="field full">
+            <span>Password</span>
+            <input id="authPassword" type="password" required minlength="6" placeholder="Minimo 6 caratteri" />
+          </label>
+          <label class="field artist-only">
+            <span>Categoria</span>
+            <select id="authCategory">
+              <option>Musicista</option>
+              <option>DJ</option>
+              <option>Cantante</option>
+              <option>Band</option>
+              <option>Tecnico audio</option>
+            </select>
+          </label>
+          <div class="field full artist-only">
+            <span>Foto profilo</span>
+            <div class="profile-photo-upload">
+              <div class="profile-photo-preview" id="profilePhotoPreview">
+                <svg class="icon"><use href="#icon-camera"></use></svg>
+              </div>
+              <div>
+                <input id="authPhoto" type="file" accept="image/*" />
+                <small>JPG o PNG. Foto salvata localmente nella demo.</small>
+              </div>
+            </div>
+          </div>
+          <label class="field artist-only">
+            <span>Data di nascita</span>
+            <input id="authBirthDate" type="date" />
+          </label>
+          <label class="field">
+            <span>Telefono / contatto</span>
+            <input id="authPhone" type="tel" placeholder="+39…" />
+          </label>
+          <label class="field artist-only">
+            <span>Strumento principale</span>
+            <input id="authInstrument" placeholder="Viola, voce, sax…" />
+          </label>
+          <label class="field artist-only">
+            <span>Diploma / titolo</span>
+            <input id="authDiploma" placeholder="Diploma accademico, conservatorio…" />
+          </label>
+          <label class="field full artist-only">
+            <span>Formazione musicale</span>
+            <textarea id="authEducation" rows="3" placeholder="Percorso di studi, corsi, masterclass…"></textarea>
+          </label>
+          <label class="field">
+            <span>Città</span>
+            <input id="authCity" required placeholder="Milano" />
+          </label>
+          <div class="field full location-registration-field" id="locationRegistrationField">
+            <span>Posizione operativa</span>
+            <div class="location-request-box">
+              <div>
+                <strong>Trova automaticamente risultati nella tua zona</strong>
+                <small id="locationStatus">La posizione verrà richiesta durante l’iscrizione.</small>
+              </div>
+              <button class="btn btn-secondary btn-small" id="useLocationButton" type="button">
+                <svg class="icon"><use href="#icon-location"></use></svg>
+                Usa posizione
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Continua</button>
+      </form>
+      <div class="social-divider"><span>oppure</span></div>
+      <div class="social-buttons">
+        <button class="btn btn-secondary btn-block" type="button" data-social="Google"><span class="social-letter">G</span> Continua con Google</button>
+        <button class="btn btn-dark btn-block" type="button" data-social="Apple"><span class="social-letter">A</span> Continua con Apple</button>
+      </div>
+      <p class="legal-note">Continuando accetti Termini, Privacy e regole della piattaforma.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="paymentModal">
+    <div class="modal payment-modal">
+      <button class="modal-close" data-close-modal="paymentModal">×</button>
+      <div class="modal-heading">
+        <span class="eyebrow">Attiva abbonamento</span>
+        <h2>Completa l’iscrizione</h2>
+        <p>Checkout dimostrativo. Nessun addebito reale viene eseguito in questa versione.</p>
+      </div>
+
+      <div class="checkout-summary">
+        <div class="checkout-plan-icon"><svg class="icon"><use href="#icon-crown"></use></svg></div>
+        <div>
+          <span id="checkoutPlanLabel">Piano artista · mensile</span>
+          <strong id="checkoutPlanPrice">€2</strong>
+        </div>
+        <small id="checkoutRenewalText">Rinnovo mensile</small>
+      </div>
+
+      <form id="paymentForm">
+        <div class="form-grid">
+          <label class="field full">
+            <span>Intestatario carta</span>
+            <input id="cardholderName" required autocomplete="cc-name" placeholder="Nome e cognome" />
+          </label>
+          <label class="field full">
+            <span>Numero carta demo</span>
+            <div class="payment-input">
+              <svg class="icon"><use href="#icon-card"></use></svg>
+              <input id="cardNumber" required inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="4242 4242 4242 4242" />
+            </div>
+          </label>
+          <label class="field">
+            <span>Scadenza</span>
+            <input id="cardExpiry" required inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/AA" />
+          </label>
+          <label class="field">
+            <span>CVC</span>
+            <input id="cardCvc" required inputmode="numeric" autocomplete="cc-csc" maxlength="3" placeholder="123" />
+          </label>
+        </div>
+        <div class="secure-note">
+          <svg class="icon"><use href="#icon-lock"></use></svg>
+          Demo sicura: dati non inviati né memorizzati.
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">
+          Attiva abbonamento
+          <svg class="icon"><use href="#icon-arrow"></use></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="artistModal">
+    <div class="modal profile-modal">
+      <button class="modal-close" data-close-modal="artistModal">×</button>
+      <div id="artistModalContent"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="bookingModal">
+    <div class="modal">
+      <button class="modal-close" data-close-modal="bookingModal">×</button>
+      <div class="modal-heading">
+        <span class="eyebrow">Richiesta diretta</span>
+        <h2 id="bookingTitle">Contatta artista</h2>
+        <p>Invia dettagli. L’artista può accettare, rifiutare o proporre un nuovo prezzo.</p>
+      </div>
+      <form id="bookingForm">
+        <input type="hidden" id="bookingArtistId" />
+        <div class="form-grid">
+          <label class="field">
+            <span>Data evento</span>
+            <input id="bookingDate" type="date" required />
+          </label>
+          <label class="field">
+            <span>Tipo evento</span>
+            <select id="bookingEventType">
+              <option>Matrimonio</option>
+              <option>Locale / ristorante</option>
+              <option>Evento aziendale</option>
+              <option>Festa privata</option>
+              <option>Hotel</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Città</span>
+            <input id="bookingCity" value="Milano" required />
+          </label>
+          <label class="field">
+            <span>Budget</span>
+            <input id="bookingBudget" type="number" min="50" step="50" value="500" required />
+          </label>
+          <label class="field full">
+            <span>Messaggio</span>
+            <textarea id="bookingMessage" rows="4" placeholder="Descrivi evento, orari e richieste tecniche…"></textarea>
+          </label>
+        </div>
+        <div class="secure-note"><svg class="icon"><use href="#icon-lock"></use></svg> Pagamento protetto: addebito solo dopo conferma.</div>
+        <button class="btn btn-primary btn-block" type="submit">Invia richiesta</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="jobModal">
+    <div class="modal">
+      <button class="modal-close" data-close-modal="jobModal">×</button>
+      <div class="modal-heading">
+        <span class="eyebrow">Nuova opportunità</span>
+        <h2>Pubblica un annuncio</h2>
+        <p>Ricevi candidature dagli artisti disponibili nella zona.</p>
+      </div>
+      <form id="jobForm">
+        <div class="form-grid">
+          <label class="field full">
+            <span>Titolo</span>
+            <input id="jobTitle" required placeholder="Es. DJ per evento aziendale" />
+          </label>
+          <label class="field">
+            <span>Città</span>
+            <input id="jobCity" required value="Milano" />
+          </label>
+          <label class="field">
+            <span>Data</span>
+            <input id="jobDate" type="date" required />
+          </label>
+          <label class="field">
+            <span>Categoria</span>
+            <select id="jobCategory">
+              <option>Musicista</option>
+              <option>DJ</option>
+              <option>Cantante</option>
+              <option>Band</option>
+              <option>Tecnico audio</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Genere musicale</span>
+            <select id="jobGenre">
+              <option>Jazz</option>
+              <option>Pop</option>
+              <option>Dance</option>
+              <option>Soul</option>
+              <option>Lounge</option>
+              <option>Corporate</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Strumento / ruolo</span>
+            <select id="jobInstrument">
+              <option>Voce</option>
+              <option>Sassofono</option>
+              <option>Chitarra</option>
+              <option>Pianoforte</option>
+              <option>Band</option>
+              <option>Console DJ</option>
+              <option>Tecnico audio</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Budget massimo</span>
+            <input id="jobBudget" type="number" min="50" step="50" value="600" required />
+          </label>
+          <label class="field full">
+            <span>Descrizione</span>
+            <textarea id="jobDescription" rows="4" required placeholder="Orari, luogo, repertorio, attrezzatura…"></textarea>
+          </label>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Pubblica annuncio</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="notification-panel hidden" id="notificationPanel">
+    <div class="notification-head">
+      <strong>Notifiche</strong>
+      <button class="text-link" id="markReadButton">Segna lette</button>
+    </div>
+    <div class="notification-item unread"><span><svg class="icon"><use href="#icon-music"></use></svg></span><div><strong>Nuova candidatura</strong><p>Marco R. ha risposto al tuo annuncio.</p></div></div>
+    <div class="notification-item unread"><span><svg class="icon"><use href="#icon-euro"></use></svg></span><div><strong>Preventivo aggiornato</strong><p>Laura propone €450 per il 12 luglio.</p></div></div>
+    <div class="notification-item unread"><span><svg class="icon"><use href="#icon-check"></use></svg></span><div><strong>Profilo verificato</strong><p>Identità e contatti approvati.</p></div></div>
+  </div>
+
+  <button class="back-to-top" id="backToTop" type="button"
+          aria-label="Torna all'inizio della pagina" title="Torna su">
+    <svg class="icon"><use href="#icon-arrow-up"></use></svg>
+    <span>Torna su</span>
+  </button>
+
+  <button class="advisor-fab" id="advisorFab" type="button" aria-label="Apri consulenza evento">
+    <svg class="icon"><use href="#icon-headset"></use></svg>
+    <span>Consulente evento</span>
+    <i></i>
+  </button>
+
+  <aside class="advisor-chat hidden" id="advisorChat" aria-label="Chat consulente evento">
+    <header class="advisor-chat-header">
+      <div class="advisor-avatar">
+        <svg class="icon"><use href="#icon-headset"></use></svg>
+      </div>
+      <div>
+        <strong>Consulente NovaVision</strong>
+        <span><i></i> Disponibile · risposta demo</span>
+      </div>
+      <button class="advisor-close" id="advisorClose" type="button">×</button>
+    </header>
+    <div class="advisor-intro">
+      Per ogni necessità o informazione sul tuo evento hai a disposizione la consulenza NovaVision.
+    </div>
+    <div class="advisor-messages" id="advisorMessages"></div>
+    <div class="advisor-quick-actions">
+      <button type="button" data-advisor-question="Quanto budget serve per la musica del mio evento?">Budget</button>
+      <button type="button" data-advisor-question="Quale artista è più adatto al mio evento?">Scelta artista</button>
+      <button type="button" data-advisor-question="Di quale impianto audio ho bisogno?">Impianto audio</button>
+    </div>
+    <form class="advisor-compose" id="advisorForm">
+      <input id="advisorInput" placeholder="Descrivi evento o necessità…" autocomplete="off" />
+      <button class="btn btn-primary btn-small" type="submit">Invia</button>
+    </form>
+  </aside>
+
+  <div class="toast hidden" id="toast"></div>
+    <script src="/legacy-app.js"></script>
+
+  <script type="module" src="/src/production-bridge.js"></script>
+
+    <script src="/runtime-fixes.js"></script>
+</body>
+</html>
+

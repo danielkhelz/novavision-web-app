@@ -1,0 +1,37 @@
+ISTRUZIONI NETLIFY
+
+Metodo consigliato per test gratuito completo, senza GitHub:
+
+1. Apri il terminale dentro questa cartella:
+   D:\DISCO D\PRGETTO NOVAVISION WEB APP\NOVAVISION WEB APP
+
+2. Installa le dipendenze:
+   npm install
+
+3. Accedi a Netlify:
+   npx netlify-cli login
+
+4. Pubblica la web app completa:
+   npm run deploy:netlify
+
+   La prima volta Netlify CLI ti chiedera di creare o collegare un sito Netlify.
+
+5. In Netlify aggiungi le variabili indicate in:
+   NETLIFY_VARIABILI_DA_COMPILARE.txt
+
+6. Dopo aver inserito le variabili, pubblica di nuovo:
+   npm run deploy:netlify
+
+Questo metodo pubblica:
+   - frontend Vite in dist
+   - funzioni Netlify in netlify/functions
+   - collegamento Supabase
+   - Stripe Checkout e webhook
+
+IMPORTANTE:
+Il drag-and-drop su Netlify pubblica solo il sito statico. Va bene per vedere grafica e frontend, ma non e sufficiente per Stripe completo, perche Stripe usa Netlify Functions.
+
+Se vuoi solo testare la grafica velocemente, puoi trascinare:
+   D:\DISCO D\PRGETTO NOVAVISION WEB APP\NOVAVISION WEB APP\NETLIFY_DRAG_DROP
+
+Per test reale con Supabase + Stripe usa invece i comandi sopra.
