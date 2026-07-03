@@ -1828,6 +1828,8 @@ function bindEvents() {
   });
 
   $("#paymentForm").addEventListener("submit", event => {
+    if (document.documentElement.dataset.backend === "supabase") return;
+
     event.preventDefault();
 
     const cardDigits = $("#cardNumber").value.replace(/\D/g, "");
@@ -1843,6 +1845,7 @@ function bindEvents() {
   });
 
   $("#manageSubscriptionButton").addEventListener("click", () => {
+    if (document.documentElement.dataset.backend === "supabase") return;
     if (!state.currentUser) return;
 
     if (state.currentUser.subscription?.tier === "free" || state.currentUser.subscription?.cycle === "free") {

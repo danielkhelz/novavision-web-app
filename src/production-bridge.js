@@ -51,7 +51,8 @@ function activeTier() {
 }
 
 function planKey(role = activeRole(), billing = activeBilling()) {
-  return `${role}_${billing}`;
+  const cycle = billing === "annual" ? "yearly" : billing;
+  return `${role}_${cycle}`;
 }
 
 function readStoredJson(key) {
@@ -357,6 +358,20 @@ function showLoginModal() {
   document.body.style.overflow = "hidden";
 }
 
+function checkoutErrorMessage(error, planKey) {
+  const message = String(error?.message || error || "");
+  if (message.includes("STRIPE_SECRET_KEY")) {
+    return "Stripe non configurato su Vercel: manca STRIPE_SECRET_KEY.";
+  }
+  if (message.includes("Stripe Price ID")) {
+    return `Stripe non configurato su Vercel: manca il Price ID per ${planKey}.`;
+  }
+  if (message.includes("Supabase server environment")) {
+    return "Supabase non configurato su Vercel: manca SUPABASE_SERVICE_ROLE_KEY.";
+  }
+  return message || "Checkout Stripe non disponibile.";
+}
+
 async function startStripeCheckout(selectedPlanKey) {
   await refreshIdentity();
   if (!session?.access_token) {
@@ -364,18 +379,36 @@ async function startStripeCheckout(selectedPlanKey) {
     return;
   }
 
-  localStorage.setItem("novavision_plan_key", selectedPlanKey);
-  const response = await fetch("/api/create-checkout-session", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${session.access_token}`
-    },
-    body: JSON.stringify({ planKey: selectedPlanKey })
-  });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || "Checkout Stripe non disponibile.");
-  window.location.assign(data.url);
+  const button = $("#manageSubscriptionButton");
+  const previousLabel = button?.textContent;
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Apertura checkout...";
+  }
+
+  try {
+    localStorage.setItem("novavision_plan_key", selectedPlanKey);
+    const response = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({ planKey: selectedPlanKey })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Checkout Stripe non disponibile.");
+    if (!data.url) throw new Error("Stripe non ha restituito un URL di pagamento.");
+    window.location.assign(data.url);
+  } catch (error) {
+    toast(checkoutErrorMessage(error, selectedPlanKey));
+    throw error;
+  } finally {
+    if (button) {
+      button.disabled = false;
+      if (previousLabel) button.textContent = previousLabel;
+    }
+  }
 }
 
 async function handleCheckoutClick(event) {
