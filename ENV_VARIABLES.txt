@@ -1,0 +1,29 @@
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+VITE_APP_URL=
+
+SUPABASE_SERVICE_ROLE_KEY=
+
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+APP_URL=
+
+STRIPE_PRICE_ARTIST_MONTHLY=
+STRIPE_PRICE_ARTIST_YEARLY=
+STRIPE_PRICE_CLIENT_MONTHLY=
+STRIPE_PRICE_CLIENT_YEARLY=
+
+# Prezzi Stripe da creare uguali alla web app:
+# STRIPE_PRICE_ARTIST_MONTHLY: Premium artista mensile - EUR 2,00 / mese
+# STRIPE_PRICE_ARTIST_YEARLY: Premium artista annuale - EUR 19,00 / anno
+# STRIPE_PRICE_CLIENT_MONTHLY: Premium cliente mensile - EUR 3,00 / mese
+# STRIPE_PRICE_CLIENT_YEARLY: Premium cliente annuale - EUR 29,00 / anno
+
+# Dove trovarle:
+# VITE_SUPABASE_URL: Supabase > Project Settings > API > Project URL
+# VITE_SUPABASE_ANON_KEY: Supabase > Project Settings > API > anon public
+# SUPABASE_SERVICE_ROLE_KEY: Supabase > Project Settings > API > service_role
+# STRIPE_SECRET_KEY: Stripe > Developers > API keys > Secret key
+# STRIPE_WEBHOOK_SECRET: Stripe > Developers > Webhooks > endpoint signing secret
+# STRIPE_PRICE_*: Stripe > Product catalog > prezzo ricorrente > Price ID
+# VITE_APP_URL e APP_URL: URL finale Vercel, es. https://novavision-web-app.vercel.app

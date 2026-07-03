@@ -1,16 +1,15 @@
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 
-export function json(statusCode, body) {
-  return {
-    statusCode,
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  };
+export function sendJson(res, statusCode, body) {
+  res.status(statusCode).json(body);
 }
 
 export function getAppUrl() {
-  return process.env.APP_URL || process.env.URL || "http://localhost:8888";
+  if (process.env.APP_URL) return process.env.APP_URL;
+  if (process.env.VITE_APP_URL) return process.env.VITE_APP_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
 }
 
 export function getStripe() {
@@ -28,8 +27,8 @@ export function getSupabaseAdmin() {
   });
 }
 
-export async function getUserFromEvent(event, supabaseAdmin) {
-  const header = event.headers.authorization || event.headers.Authorization || "";
+export async function getUserFromRequest(req, supabaseAdmin) {
+  const header = req.headers.authorization || req.headers.Authorization || "";
   const token = header.replace(/^Bearer\s+/i, "");
   if (!token) throw new Error("Missing Authorization bearer token.");
   const { data, error } = await supabaseAdmin.auth.getUser(token);
@@ -64,4 +63,12 @@ export async function getOrCreateCustomer({ stripe, supabaseAdmin, user, profile
     .eq("id", user.id);
 
   return customer.id;
+}
+
+export async function readRawBody(req) {
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
 }

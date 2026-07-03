@@ -4,21 +4,25 @@ import {
   getPriceId,
   getStripe,
   getSupabaseAdmin,
-  getUserFromEvent,
-  json
+  getUserFromRequest,
+  sendJson
 } from "./_shared.js";
 
-export async function handler(event) {
-  if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
+export default async function handler(req, res) {
+  if (req.method !== "POST") return sendJson(res, 405, { error: "Method not allowed" });
 
   try {
     const stripe = getStripe();
     const supabaseAdmin = getSupabaseAdmin();
-    const user = await getUserFromEvent(event, supabaseAdmin);
-    const { planKey } = JSON.parse(event.body || "{}");
+    const user = await getUserFromRequest(req, supabaseAdmin);
+    const { planKey } = req.body || {};
     const price = getPriceId(planKey);
 
-    const { data: profile, error } = await supabaseAdmin.from("profiles").select("*").eq("id", user.id).maybeSingle();
+    const { data: profile, error } = await supabaseAdmin
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
     if (error) throw error;
 
     const customer = await getOrCreateCustomer({ stripe, supabaseAdmin, user, profile });
@@ -43,8 +47,8 @@ export async function handler(event) {
       }
     });
 
-    return json(200, { url: session.url });
+    return sendJson(res, 200, { url: session.url });
   } catch (error) {
-    return json(400, { error: error.message });
+    return sendJson(res, 400, { error: error.message });
   }
 }

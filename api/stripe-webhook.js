@@ -1,8 +1,10 @@
-import { getStripe, getSupabaseAdmin, json } from "./_shared.js";
+import { getStripe, getSupabaseAdmin, readRawBody, sendJson } from "./_shared.js";
 
-function rawBody(event) {
-  return Buffer.from(event.body || "", event.isBase64Encoded ? "base64" : "utf8");
-}
+export const config = {
+  api: {
+    bodyParser: false
+  }
+};
 
 async function upsertSubscription(supabaseAdmin, stripe, subscriptionId) {
   const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
@@ -16,7 +18,8 @@ async function upsertSubscription(supabaseAdmin, stripe, subscriptionId) {
   await supabaseAdmin.from("subscriptions").upsert(
     {
       user_id: userId,
-      stripe_customer_id: typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id,
+      stripe_customer_id:
+        typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id,
       stripe_subscription_id: subscription.id,
       stripe_price_id: item?.price?.id || null,
       plan_key: subscription.metadata?.plan_key || null,
@@ -29,17 +32,18 @@ async function upsertSubscription(supabaseAdmin, stripe, subscriptionId) {
   );
 }
 
-export async function handler(event) {
-  if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
+export default async function handler(req, res) {
+  if (req.method !== "POST") return sendJson(res, 405, { error: "Method not allowed" });
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!webhookSecret) return json(500, { error: "STRIPE_WEBHOOK_SECRET is not configured." });
+  if (!webhookSecret) return sendJson(res, 500, { error: "STRIPE_WEBHOOK_SECRET is not configured." });
 
   try {
     const stripe = getStripe();
     const supabaseAdmin = getSupabaseAdmin();
-    const signature = event.headers["stripe-signature"] || event.headers["Stripe-Signature"];
-    const stripeEvent = stripe.webhooks.constructEvent(rawBody(event), signature, webhookSecret);
+    const signature = req.headers["stripe-signature"];
+    const rawBody = await readRawBody(req);
+    const stripeEvent = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
 
     if (stripeEvent.type === "checkout.session.completed") {
       const session = stripeEvent.data.object;
@@ -54,8 +58,8 @@ export async function handler(event) {
       await upsertSubscription(supabaseAdmin, stripe, stripeEvent.data.object.id);
     }
 
-    return json(200, { received: true });
+    return sendJson(res, 200, { received: true });
   } catch (error) {
-    return json(400, { error: error.message });
+    return sendJson(res, 400, { error: error.message });
   }
 }

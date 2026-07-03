@@ -34,8 +34,8 @@ loadEnvFile(resolve(root, ".env.local"));
 const appUrl =
   process.env.VITE_APP_URL ||
   process.env.APP_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
   process.env.URL ||
-  process.env.DEPLOY_PRIME_URL ||
   "";
 
 const config = {

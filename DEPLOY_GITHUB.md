@@ -1,62 +1,61 @@
-# NovaVision — Pubblicazione su GitHub + Netlify
+# NovaVision — Pubblicazione su GitHub + Vercel
 
-Guida per pubblicare il repository su GitHub e testare iscrizioni e pagamenti Stripe.
+Guida per pubblicare il repository su GitHub e testare iscrizioni e pagamenti Stripe **senza Netlify**.
+
+## Perche Vercel
+
+Stripe richiede API server-side (checkout, webhook, portale abbonamenti). GitHub Pages pubblica solo file statici.
+
+Vercel collega GitHub, esegue la build Vite e ospita le API in `api/` — piano gratuito sufficiente per test.
 
 ## 1. Crea repository GitHub
 
-1. Vai su https://github.com/new
-2. Nome suggerito: `novavision-web-app`
-3. Visibilita: `Public` o `Private`
-4. Non aggiungere README, `.gitignore` o licenza (esistono gia nel progetto)
-5. Crea il repository
+1. https://github.com/new
+2. Nome: `novavision-web-app`
+3. Non aggiungere README o `.gitignore` (gia nel progetto)
+4. Crea il repository
 
 ## 2. Carica il codice
 
-Dalla cartella progetto:
-
 ```bash
-git init
-git add .
-git commit -m "Initial commit: NovaVision web app"
-git branch -M main
+cd "D:\DISCO D\PRGETTO NOVAVISION WEB APP\NOVAVISION WEB APP"
 git remote add origin https://github.com/TUO-USERNAME/novavision-web-app.git
 git push -u origin main
 ```
 
-## 3. Collega Netlify a GitHub
+## 3. Collega Vercel a GitHub
 
-1. Vai su https://app.netlify.com
-2. `Add new site` -> `Import an existing project`
-3. Scegli `GitHub` e autorizza Netlify
-4. Seleziona il repository `novavision-web-app`
-5. Conferma impostazioni build:
+1. https://vercel.com → accedi con GitHub
+2. `Add New` → `Project`
+3. Importa `novavision-web-app`
+4. Conferma impostazioni (lette da `vercel.json`):
 
 | Campo | Valore |
 |-------|--------|
+| Framework | Other |
 | Build command | `npm run build` |
-| Publish directory | `dist` |
-| Functions directory | `netlify/functions` |
+| Output directory | `dist` |
 
-Netlify legge gia `netlify.toml`; questi valori sono precompilati.
+5. Deploy
 
-## 4. Variabili ambiente Netlify
+## 4. Variabili ambiente Vercel
 
-In Netlify: `Site configuration` -> `Environment variables`
+`Project Settings` → `Environment Variables`
 
-Inserisci tutte le variabili da `.env.example` o `NETLIFY_VARIABILI_DA_COMPILARE.txt`:
+Inserisci tutte le variabili da `.env.example` o `ENV_VARIABLES.txt`:
 
-**Frontend (pubbliche)**
+**Frontend**
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
-- `VITE_APP_URL` — URL Netlify, es. `https://novavision-web-app.netlify.app`
+- `VITE_APP_URL` — URL Vercel, es. `https://novavision-web-app.vercel.app`
 
-**Backend (segrete, solo Netlify)**
+**Backend (segrete)**
 
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `STRIPE_SECRET_KEY` — usa chiave `sk_test_...` per test
+- `STRIPE_SECRET_KEY` — `sk_test_...` per test
 - `STRIPE_WEBHOOK_SECRET`
-- `APP_URL` — stesso URL Netlify di `VITE_APP_URL`
+- `APP_URL` — stesso URL di `VITE_APP_URL`
 - `STRIPE_PRICE_ARTIST_MONTHLY`
 - `STRIPE_PRICE_ARTIST_YEARLY`
 - `STRIPE_PRICE_CLIENT_MONTHLY`
@@ -67,11 +66,11 @@ Dopo il primo deploy, aggiorna `VITE_APP_URL` e `APP_URL` con l'URL reale e rifa
 ## 5. Supabase
 
 1. Crea progetto su https://supabase.com
-2. Esegui `SUPABASE_SQL_DA_ESEGUIRE.sql` nel SQL Editor
-3. In `Authentication` -> `URL Configuration`:
-   - Site URL: URL Netlify
-   - Redirect URLs: URL Netlify
-4. Rendi admin il primo account:
+2. Esegui `SUPABASE_SQL_DA_ESEGUIRE.sql`
+3. `Authentication` → `URL Configuration`:
+   - Site URL: URL Vercel
+   - Redirect URLs: URL Vercel
+4. Admin primo account:
 
 ```sql
 update public.profiles
@@ -79,58 +78,57 @@ set is_admin = true, publication_status = 'approved'
 where email = 'tua-email@example.com';
 ```
 
-## 6. Stripe (modalita test)
+## 6. Stripe (test)
 
-1. Account Stripe in test mode
-2. Crea i 4 prezzi ricorrenti (vedi `STRIPE_PREZZI_DA_CREARE.md`) oppure:
-
-```bash
-npm run stripe:prices
-```
-
-3. Webhook endpoint:
+1. Modalita test attiva
+2. Crea prezzi: `npm run stripe:prices` oppure `STRIPE_PREZZI_DA_CREARE.md`
+3. Webhook:
 
 ```text
-https://TUO-SITO.netlify.app/.netlify/functions/stripe-webhook
+https://TUO-SITO.vercel.app/api/stripe-webhook
 ```
 
-Eventi da abilitare:
+Eventi:
 
 - `checkout.session.completed`
 - `customer.subscription.created`
 - `customer.subscription.updated`
 - `customer.subscription.deleted`
 
-4. Copia il signing secret `whsec_...` in `STRIPE_WEBHOOK_SECRET` su Netlify
+4. Signing secret `whsec_...` → `STRIPE_WEBHOOK_SECRET` su Vercel
 
-## 7. Test funzionalita
+## 7. Test
 
-Dopo deploy riuscito:
-
-1. Registrazione utente (artista o cliente)
+1. Registrazione utente
 2. Login
-3. Dashboard -> scegli piano Premium
-4. Checkout Stripe con carta test `4242 4242 4242 4242`
+3. Dashboard → piano Premium
+4. Carta test `4242 4242 4242 4242`
 5. Verifica abbonamento in dashboard e tabella `subscriptions` su Supabase
-6. `Gestisci abbonamento` -> portale Stripe
+6. `Gestisci abbonamento` → portale Stripe
 
 ## 8. Deploy automatici
 
-Ogni `git push` su `main` attiva rebuild Netlify.
+Ogni `git push` su `main` → rebuild Vercel.
 
-Per sviluppo locale:
+## Sviluppo locale
 
 ```bash
 cp .env.example .env
-# compila .env con le tue chiavi
+# compila .env
 npm install
-npm run dev:netlify
+npm run dev:api
 ```
 
-`dev:netlify` avvia Vite + funzioni Netlify in locale sulla porta 8888.
+Apri http://localhost:3000 — frontend + API Stripe in locale.
 
-## Note sicurezza
+Solo frontend (senza pagamenti):
+
+```bash
+npm run dev
+```
+
+## Sicurezza
 
 - Mai committare `.env` o chiavi `service_role` / `sk_live_`
-- `public/env.js` viene rigenerato a ogni build da variabili `VITE_*`
-- Usa sempre `sk_test_` e webhook test finche non vai in produzione
+- `public/env.js` rigenerato a ogni build
+- Usa `sk_test_` finche non vai in produzione

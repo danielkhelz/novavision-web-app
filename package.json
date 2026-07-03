@@ -7,12 +7,12 @@
     "prebuild": "node scripts/generate-env.js",
     "predev": "node scripts/generate-env.js",
     "dev": "vite --host 0.0.0.0",
-    "dev:netlify": "npx netlify-cli dev",
+    "dev:api": "npx vercel dev",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "lint": "node scripts/check-env.js",
     "stripe:prices": "node scripts/create-stripe-prices.js",
-    "deploy:netlify": "npm run build && npx netlify-cli deploy --prod --dir=dist --functions=netlify/functions"
+    "deploy": "npx vercel --prod"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

@@ -12,10 +12,11 @@ dist/
 # Generated at build from VITE_* vars (placeholder version is tracked)
 public/env.js
 
-# Netlify local state
-.netlify/
+# Vercel local state
+.vercel/
 
-# Static drag-drop bundle (not needed with GitHub deploy)
+# Legacy Netlify / static bundles
+.netlify/
 NETLIFY_DRAG_DROP/
 
 # Logs

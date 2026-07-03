@@ -1,12 +1,12 @@
-import { getAppUrl, getStripe, getSupabaseAdmin, getUserFromEvent, json } from "./_shared.js";
+import { getAppUrl, getStripe, getSupabaseAdmin, getUserFromRequest, sendJson } from "./_shared.js";
 
-export async function handler(event) {
-  if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
+export default async function handler(req, res) {
+  if (req.method !== "POST") return sendJson(res, 405, { error: "Method not allowed" });
 
   try {
     const stripe = getStripe();
     const supabaseAdmin = getSupabaseAdmin();
-    const user = await getUserFromEvent(event, supabaseAdmin);
+    const user = await getUserFromRequest(req, supabaseAdmin);
     const { data: profile, error } = await supabaseAdmin
       .from("profiles")
       .select("stripe_customer_id")
@@ -20,8 +20,8 @@ export async function handler(event) {
       return_url: `${getAppUrl()}/#dashboard`
     });
 
-    return json(200, { url: session.url });
+    return sendJson(res, 200, { url: session.url });
   } catch (error) {
-    return json(400, { error: error.message });
+    return sendJson(res, 400, { error: error.message });
   }
 }

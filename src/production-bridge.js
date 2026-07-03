@@ -365,7 +365,7 @@ async function startStripeCheckout(selectedPlanKey) {
   }
 
   localStorage.setItem("novavision_plan_key", selectedPlanKey);
-  const response = await fetch("/.netlify/functions/create-checkout-session", {
+  const response = await fetch("/api/create-checkout-session", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -419,7 +419,7 @@ async function handlePortalClick(event) {
       return;
     }
 
-    const response = await fetch("/.netlify/functions/create-customer-portal-session", {
+    const response = await fetch("/api/create-customer-portal-session", {
       method: "POST",
       headers: { Authorization: `Bearer ${session.access_token}` }
     });

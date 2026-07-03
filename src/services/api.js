@@ -179,7 +179,7 @@ export async function updateReviewStatus(table, id, status) {
 }
 
 export async function createCheckoutSession(planKey, accessToken) {
-  const response = await fetch("/.netlify/functions/create-checkout-session", {
+  const response = await fetch("/api/create-checkout-session", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -193,7 +193,7 @@ export async function createCheckoutSession(planKey, accessToken) {
 }
 
 export async function createPortalSession(accessToken) {
-  const response = await fetch("/.netlify/functions/create-customer-portal-session", {
+  const response = await fetch("/api/create-customer-portal-session", {
     method: "POST",
     headers: { Authorization: `Bearer ${accessToken}` }
   });
